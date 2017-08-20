@@ -1,0 +1,39 @@
+<?xml version="1.0"?>
+<!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN"
+"http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd">
+<!-- Generated 2017-8-9 23:35:22 by Hibernate Tools 3.2.2.GA -->
+<hibernate-mapping>
+    <class name="com.chengzhi.scdp.usermanager.dao.SysUser" table="sys_user" schema="sdsdb">
+        <id name="userId" type="java.lang.Long">
+            <column name="user_id" />
+            <generator class="identity" />
+        </id>
+        <property name="loginName" type="string">
+            <column name="login_name" length="100" not-null="true" />
+        </property>
+        <property name="loginPassword" type="string">
+            <column name="login_password" length="100" not-null="true" />
+        </property>
+        <property name="userName" type="string">
+            <column name="user_name" length="100" not-null="true" />
+        </property>
+        <property name="sex" type="java.lang.Character">
+            <column name="sex" length="1" />
+        </property>
+        <property name="phoneNumber" type="string">
+            <column name="phone_number" length="20" />
+        </property>
+        <property name="isValid" type="java.lang.Character">
+            <column name="is_valid" length="1" />
+        </property>
+        <property name="createDate" type="timestamp">
+            <column name="create_date" length="19" not-null="true" />
+        </property>
+        <property name="creater" type="string">
+            <column name="creater" length="100" not-null="true" />
+        </property>
+        <property name="organizationId" type="java.lang.Long">
+            <column name="organization_id" not-null="true" />
+        </property>
+    </class>
+</hibernate-mapping>
