@@ -1,16 +1,8 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
 <html>
-<body>
 	<div class="navbar-header">
-      <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
-	      <span class="sr-only">Toggle navigation</span>
-	      <span class="icon-bar"></span>
-	      <span class="icon-bar"></span>
-	      <span class="icon-bar"></span>
-      </button>
-      <a class="navbar-brand">智云订单管理平台</a>
+      <a class="navbar-brand" style="color: #fff;">智云订单管理平台</a>
 	</div>
-	
 	<!-- 头信息栏 -->
     <ul class="nav navbar-top-links navbar-right">
     
@@ -56,6 +48,4 @@
 		</li>
 		
 	</ul>
-    
-</body>
 </html>
