@@ -14,8 +14,14 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 		<link rel="stylesheet" type="text/css" href="js/bootstrap3.3.7/css/bootstrap.min.css">
 		<link rel="stylesheet" type="text/css" href="js/bootstrap3.3.7/css/bootstrap-theme.min.css">
 		<link rel="stylesheet" type="text/css" href="js/bootstrap3.3.7/css/grid.css">
+		<link rel="stylesheet" type="text/css" href="css/breadcrumb-style.css"/>
+		
+		<link href="js/bootstrap3.3.7/css/sb-admin-2.min.css" rel="stylesheet">
+		<link href="js/bootstrap3.3.7/css/font-awesome.min.css" rel="stylesheet" type="text/css">
 		
 		<script type="text/javascript" src="js/jquery/jquery-3.2.1.min.js"></script>
 		<script type="text/javascript" src="js/bootstrap3.3.7/js/bootstrap.min.js"></script>
+		
+		<script src="js/bootstrap3.3.7/js/sb-admin-2.min.js"></script>
 	</head>
 </html>
