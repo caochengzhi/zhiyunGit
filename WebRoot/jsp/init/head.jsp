@@ -1,6 +1,12 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
 <html>
 	<div class="navbar-header">
+	  <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
+	      <span class="sr-only">Toggle navigation</span>
+	      <span class="icon-bar"></span>
+	      <span class="icon-bar"></span>
+	      <span class="icon-bar"></span>
+      </button>
       <a class="navbar-brand" style="color: #fff;">智云订单管理平台</a>
 	</div>
 	<!-- 头信息栏 -->
@@ -10,7 +16,10 @@
 		<li class="dropdown">
 			<a class="dropdown-toggle" data-toggle="dropdown" href="#"> <i class="fa fa-bell fa-fw"></i>
 				<i class="fa fa-caret-down"></i>
+				&nbsp;
+				<span class="badge badge-pill badge-danger" style="color: red;">5</span>
 			</a>
+			
 			<ul class="dropdown-menu dropdown-alerts">
 				<li>
 					<a href="#">
