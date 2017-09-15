@@ -1,4 +1,4 @@
-package com.chengzhi.scdp.usermanager.dao;
+package com.chengzhi.scdp.system.dao;
 
 import com.chengzhi.scdp.database.dao.IBaseDao;
 

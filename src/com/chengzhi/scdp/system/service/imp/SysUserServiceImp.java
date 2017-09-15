@@ -1,4 +1,4 @@
-package com.chengzhi.scdp.usermanager.service.imp;
+package com.chengzhi.scdp.system.service.imp;
 
 import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -7,9 +7,9 @@ import org.springframework.stereotype.Service;
 
 import com.chengzhi.scdp.database.dao.IBaseDao;
 import com.chengzhi.scdp.database.service.imp.BaseServiceImp;
-import com.chengzhi.scdp.usermanager.dao.ISysUserDao;
-import com.chengzhi.scdp.usermanager.dao.SysUser;
-import com.chengzhi.scdp.usermanager.service.ISysUserService;
+import com.chengzhi.scdp.system.dao.ISysUserDao;
+import com.chengzhi.scdp.system.dao.SysUser;
+import com.chengzhi.scdp.system.service.ISysUserService;
 
 /**
  * 系统用户服务类

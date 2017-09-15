@@ -7,7 +7,7 @@ import org.apache.log4j.Logger;
 import org.springframework.web.servlet.ModelAndView;
 import org.springframework.web.servlet.handler.HandlerInterceptorAdapter;
 
-import com.chengzhi.scdp.usermanager.dao.SysUser;
+import com.chengzhi.scdp.system.dao.SysUser;
 
 /**
  * 系统全局所有请求拦截器

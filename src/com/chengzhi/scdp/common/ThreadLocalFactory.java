@@ -2,7 +2,7 @@ package com.chengzhi.scdp.common;
 
 import java.io.Serializable;
 
-import com.chengzhi.scdp.usermanager.dao.SysUser;
+import com.chengzhi.scdp.system.dao.SysUser;
 
 /**
  * 为每个请求，分配一个本地线程变量，用来存放当前线程的用户

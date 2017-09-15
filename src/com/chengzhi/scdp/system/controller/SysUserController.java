@@ -1,4 +1,4 @@
-package com.chengzhi.scdp.usermanager.controller;
+package com.chengzhi.scdp.system.controller;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
