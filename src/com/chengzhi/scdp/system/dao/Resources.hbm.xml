@@ -1,0 +1,27 @@
+<?xml version="1.0"?>
+<!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN"
+"http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd">
+<!-- Generated 2017-9-24 18:55:18 by Hibernate Tools 3.2.2.GA -->
+<hibernate-mapping>
+    <class name="com.chengzhi.scdp.system.dao.Resources" table="resources" catalog="sdsdb">
+        <id name="resourceId" type="java.lang.Long">
+            <column name="resource_id" />
+            <generator class="identity" />
+        </id>
+        <property name="title" type="java.lang.String">
+            <column name="title" length="100" not-null="true"/>
+        </property>
+        <property name="url" type="java.lang.String">
+            <column name="url" length="100" not-null="true"/>
+        </property>
+        <property name="parentId" type="java.lang.Long">
+            <column name="parent_id"/>
+        </property>
+        <property name="level" type="java.lang.Integer">
+            <column name="level"/>
+        </property>
+        <property name="organizationId" type="java.lang.Long">
+            <column name="organization_id" not-null="true"/>
+        </property>
+    </class>
+</hibernate-mapping>

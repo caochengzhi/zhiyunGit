@@ -1,8 +1,5 @@
 package com.chengzhi.scdp.system.controller;
 
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -23,7 +20,7 @@ public class LoginController {
 	private ISysUserService sysUserService;
 
 	@RequestMapping(value = "/Verification", method = {RequestMethod.POST})
-	public String login(HttpServletRequest request,HttpServletResponse response){
+	public String login(){
 		return "/main";
 	}
 }

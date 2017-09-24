@@ -4,9 +4,9 @@ import java.util.Date;
 
 import com.chengzhi.scdp.database.dao.AbstractModel;
 
-public class SysUser extends AbstractModel{
+public class Users extends AbstractModel {
 
-	private static final long serialVersionUID = 8910322665979990638L;
+	private static final long serialVersionUID = 1613113405175819652L;
 	private Long userId;
 	private String loginName;
 	private String loginPassword;
@@ -18,11 +18,11 @@ public class SysUser extends AbstractModel{
 	private String creater;
 	private Long organizationId;
 
-	public SysUser() {
+	public Users() {
 	}
 
-	public SysUser(String loginName, String loginPassword, String userName,
-			Date createDate, String creater, Long organizationId) {
+	public Users(String loginName, String loginPassword, String userName,
+			Date createDate, String creater, long organizationId) {
 		this.loginName = loginName;
 		this.loginPassword = loginPassword;
 		this.userName = userName;
@@ -31,9 +31,9 @@ public class SysUser extends AbstractModel{
 		this.organizationId = organizationId;
 	}
 
-	public SysUser(String loginName, String loginPassword, String userName,
+	public Users(String loginName, String loginPassword, String userName,
 			Character sex, String phoneNumber, Character isValid,
-			Date createDate, String creater, Long organizationId) {
+			Date createDate, String creater, long organizationId) {
 		this.loginName = loginName;
 		this.loginPassword = loginPassword;
 		this.userName = userName;
@@ -121,7 +121,7 @@ public class SysUser extends AbstractModel{
 		return this.organizationId;
 	}
 
-	public void setOrganizationId(Long organizationId) {
+	public void setOrganizationId(long organizationId) {
 		this.organizationId = organizationId;
 	}
 

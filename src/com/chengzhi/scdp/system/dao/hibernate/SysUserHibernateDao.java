@@ -4,9 +4,9 @@ import org.springframework.stereotype.Repository;
 
 import com.chengzhi.scdp.database.dao.hibernate.BaseHibernateDao;
 import com.chengzhi.scdp.system.dao.ISysUserDao;
-import com.chengzhi.scdp.system.dao.SysUser;
+import com.chengzhi.scdp.system.dao.Users;
 
 @Repository("sysUserDao")
-public class SysUserHibernateDao extends BaseHibernateDao<SysUser, String> implements ISysUserDao{
+public class SysUserHibernateDao extends BaseHibernateDao<Users, String> implements ISysUserDao{
 
 }

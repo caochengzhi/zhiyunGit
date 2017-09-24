@@ -8,7 +8,7 @@ import org.springframework.stereotype.Service;
 import com.chengzhi.scdp.database.dao.IBaseDao;
 import com.chengzhi.scdp.database.service.imp.BaseServiceImp;
 import com.chengzhi.scdp.system.dao.ISysUserDao;
-import com.chengzhi.scdp.system.dao.SysUser;
+import com.chengzhi.scdp.system.dao.Users;
 import com.chengzhi.scdp.system.service.ISysUserService;
 
 /**
@@ -17,7 +17,7 @@ import com.chengzhi.scdp.system.service.ISysUserService;
  *
  */
 @Service
-public class SysUserServiceImp extends BaseServiceImp<SysUser, String> implements ISysUserService {
+public class SysUserServiceImp extends BaseServiceImp<Users, String> implements ISysUserService {
 	private Logger logger = Logger.getLogger(this.getClass());
 
 	private ISysUserDao sysUserDao;
@@ -25,7 +25,7 @@ public class SysUserServiceImp extends BaseServiceImp<SysUser, String> implement
 	@Autowired
 	@Qualifier("sysUserDao")
 	@Override
-	public void setBaseDao(IBaseDao<SysUser, String> baseDao) {
+	public void setBaseDao(IBaseDao<Users, String> baseDao) {
 		this.baseDao = baseDao;
 		sysUserDao = (ISysUserDao)baseDao;
 	}

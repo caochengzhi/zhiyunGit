@@ -1,35 +1,35 @@
 <?xml version="1.0"?>
 <!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN"
 "http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd">
-<!-- Generated 2017-8-9 23:35:22 by Hibernate Tools 3.2.2.GA -->
+<!-- Generated 2017-9-24 18:55:18 by Hibernate Tools 3.2.2.GA -->
 <hibernate-mapping>
-    <class name="com.chengzhi.scdp.usermanager.dao.SysUser" table="sys_user" schema="sdsdb">
+    <class name="com.chengzhi.scdp.system.dao.Users" table="users" catalog="sdsdb">
         <id name="userId" type="java.lang.Long">
             <column name="user_id" />
             <generator class="identity" />
         </id>
-        <property name="loginName" type="string">
+        <property name="loginName" type="java.lang.String">
             <column name="login_name" length="100" not-null="true" />
         </property>
-        <property name="loginPassword" type="string">
+        <property name="loginPassword" type="java.lang.String">
             <column name="login_password" length="100" not-null="true" />
         </property>
-        <property name="userName" type="string">
+        <property name="userName" type="java.lang.String">
             <column name="user_name" length="100" not-null="true" />
         </property>
         <property name="sex" type="java.lang.Character">
             <column name="sex" length="1" />
         </property>
-        <property name="phoneNumber" type="string">
+        <property name="phoneNumber" type="java.lang.String">
             <column name="phone_number" length="20" />
         </property>
         <property name="isValid" type="java.lang.Character">
             <column name="is_valid" length="1" />
         </property>
-        <property name="createDate" type="timestamp">
+        <property name="createDate" type="java.util.Date">
             <column name="create_date" length="19" not-null="true" />
         </property>
-        <property name="creater" type="string">
+        <property name="creater" type="java.lang.String">
             <column name="creater" length="100" not-null="true" />
         </property>
         <property name="organizationId" type="java.lang.Long">
