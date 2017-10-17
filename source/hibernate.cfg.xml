@@ -1,7 +1,7 @@
 <?xml version='1.0' encoding='UTF-8'?>
 <!DOCTYPE hibernate-configuration PUBLIC
           "-//Hibernate/Hibernate Configuration DTD 3.0//EN"
-          "http://hibernate.sourceforge.net/hibernate-configuration-3.0.dtd">
+          "http://www.hibernate.org/dtd/hibernate-configuration-3.0.dtd">
 
 <hibernate-configuration>
 
@@ -11,7 +11,11 @@
 		<property name="jdbc.batch_size">0</property>
 		<property name="dialect">org.hibernate.dialect.MySQL5Dialect</property>
 		
-		<mapping resource="com/chengzhi/scdp/usermanager/dao/SysUser.hbm.xml" />
+		<mapping resource="com/chengzhi/scdp/system/dao/Users.hbm.xml" />
+		<mapping resource="com/chengzhi/scdp/system/dao/Resources.hbm.xml" />
+		<mapping resource="com/chengzhi/scdp/system/dao/RoleResource.hbm.xml" />
+		<mapping resource="com/chengzhi/scdp/system/dao/Roles.hbm.xml" />
+		<mapping resource="com/chengzhi/scdp/system/dao/UserRole.hbm.xml" />
 		
 	</session-factory>
 
