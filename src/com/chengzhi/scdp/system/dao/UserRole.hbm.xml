@@ -1,9 +1,9 @@
 <?xml version="1.0"?>
 <!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN"
-"http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd">
+"http://www.hibernate.org/dtd/hibernate-mapping-3.0.dtd">
 <!-- Generated 2017-9-24 18:55:18 by Hibernate Tools 3.2.2.GA -->
 <hibernate-mapping>
-    <class name="UserRole" table="user_role" catalog="sdsdb">
+    <class name="com.chengzhi.scdp.system.dao.UserRole" table="user_role" catalog="sdsdb">
         <id name="id" type="java.lang.Long">
             <column name="id" />
             <generator class="identity" />
