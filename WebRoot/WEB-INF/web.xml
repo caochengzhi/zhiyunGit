@@ -65,6 +65,17 @@
 		<url-pattern>/</url-pattern>
 	</filter-mapping>
 	  
+	<servlet-mapping>    
+	     <servlet-name>default</servlet-name>    
+	     <url-pattern>*.js</url-pattern>    
+	     <url-pattern>*.css</url-pattern> 
+	     <url-pattern>*.woff</url-pattern>
+	     <url-pattern>*.ttf</url-pattern> 
+	     <url-pattern>/js/*</url-pattern>
+	     <url-pattern>/css/*"</url-pattern>    
+	     <url-pattern>/images/*</url-pattern>    
+ 	</servlet-mapping> 
+  
 	<!-- 连接池监控的servlet -->  
 	<servlet>  
 	    <servlet-name>ProxoolAdmin</servlet-name>  
@@ -75,6 +86,11 @@
 	    <url-pattern>/ProxoolAdmin</url-pattern>  
 	</servlet-mapping>
   
+	<error-page>
+	  	<error-code>404</error-code>
+	  	<location>/jsp/error/404.html</location>
+	</error-page>
+	
 	<welcome-file-list>
 		<welcome-file>index.jsp</welcome-file>
 	</welcome-file-list>
