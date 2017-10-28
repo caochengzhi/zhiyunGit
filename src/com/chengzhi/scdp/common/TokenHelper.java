@@ -1,6 +1,7 @@
 package com.chengzhi.scdp.common;
 
 import java.math.BigInteger;
+import java.util.HashMap;
 import java.util.Map;
 import java.util.Random;
 
@@ -12,6 +13,8 @@ import com.chengzhi.scdp.Constants;
 
 /**
  * TokenHelper
+ * Token校验类，做页面请求校验，每次生成的token缓存起来，当页面请求时做token校验，
+ * 通过了校验就删除缓存token，如果页面重复请求就返回false
  * 
  */
 public class TokenHelper{
@@ -26,6 +29,7 @@ public class TokenHelper{
      */
     private static final Logger LOG = Logger.getLogger(TokenHelper.class);
     private static final Random RANDOM = new Random();
+    private static Map<String, String> cacheToken = new HashMap<String, String>();
     
     /**
      * 使用随机字串作为token名字保存token
@@ -57,6 +61,10 @@ public class TokenHelper{
      */
     private static void setCacheToken(HttpServletRequest request, String tokenName, String token){
         try{
+        	//服务端缓存当次token
+        	cacheToken.put(buildTokenCacheAttributeName(tokenName), token);
+        	
+        	//客户端设置当次token
             request.setAttribute(Constants.TOKEN_NAME, tokenName);
             request.setAttribute(Constants.TOKEN, token);
         }catch(IllegalStateException e){
@@ -119,7 +127,6 @@ public class TokenHelper{
     
     /**
      * 验证当前请求参数中的token是否合法，如果合法的token出现就会删除它，它不会再次成功合法的token
-     * 
      * @return 验证结果
      */
     public static boolean validToken(HttpServletRequest request){
@@ -132,9 +139,18 @@ public class TokenHelper{
         String token = getToken(request, tokenName);
         TokenCheckResult isCheck = JavaWebToken.validateJWT(token);
         if(isCheck == null || !isCheck.getIsSucess()){
-        	LOG.error("no token found for token name " + tokenName + " -> Invalid token, "+isCheck.getErrorCode());
+        	LOG.error("invalid.token for token name " + tokenName + " , does not match the token");
         	return false;
         }
+        
+        /*
+         * 
+         * 当次token服务端验证通过后，删除缓存token，客户端重复提交就报异常，因为服务端认为此token已经失效
+         */
+        String tokenKey = buildTokenCacheAttributeName(tokenName);
+        if(cacheToken.get(tokenKey) == null)
+        	return false;
+        cacheToken.remove(tokenKey);
         
         return true;
     }
