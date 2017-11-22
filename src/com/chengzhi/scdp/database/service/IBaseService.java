@@ -8,26 +8,36 @@ import com.chengzhi.scdp.database.dao.PageList;
 
 public interface IBaseService<T extends AbstractModel, PK extends Serializable> {
 
-    public T save(T model);
+     T save(T model);
 
-    public void saveOrUpdate(T model);
+     void saveOrUpdate(T model);
     
-    public void update(T model);
+     void update(T model);
     
-    public void merge(T model);
+     void merge(T model);
 
-    public void delete(Class<T> entityClass, PK id);
+     void delete(Class<T> entityClass, PK id);
 
-    public void deleteObject(T model);
+     void deleteObject(T model);
 
-    public T get(Class<T> entityClass, PK id);
+     List<T> findByProperty(Class<T> entityClass, String propertyName, Object value);
+     
+     T get(Class<T> entityClass, PK id);
     
-    public int count(Class<T> entityClass);
+     int count(T cond);
     
-    public List<T> listAll(Class<T> entityClass);
+     List<T> findByCond(T cond);
     
-    public List<T> listAll(Class<T> entityClass, int pageNum);
+     List<T> findByCond(T cond, String sortName, String sortOrder, int pageNum);
     
-    public PageList<T> listAll(Class<T> entityClass, int pageNum, int pageSize);
-
+     /**
+      * 分页查询
+      * @param cond 查询对象
+      * @param sortName 排序字段
+      * @param sortOrder 排序顺序
+      * @param pageNum 页数
+      * @param pageSize 每页大小
+      * @return 自定义分页对象
+      */
+     PageList<T> findByCond(T cond,String sortName, String sortOrder, int pageNum, int pageSize);
 }

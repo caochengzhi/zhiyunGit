@@ -58,30 +58,41 @@ public abstract class BaseServiceImp<T extends AbstractModel, PK extends Seriali
     }
     
     @Override
-    public int count(Class<T> entityClass) {
-        return baseDao.count(entityClass);
+    public int count(T cond) {
+        return baseDao.count(cond);
     }
     
     @Override
-    public List<T> listAll(Class<T> entityClass) {
-        return baseDao.listAll(entityClass);
+    public List<T> findByCond(T cond) {
+        return baseDao.findByCond(cond);
     }
     
-    /**
+    @Override
+	public List<T> findByProperty(Class<T> entityClass, String propertyName,Object value) {
+		return baseDao.findByProperty(entityClass, propertyName, value);
+	}
+
+	/**
      * 分页查询，默认一次查询十条记录
      */
     @Override
-    public List<T> listAll(Class<T> entityClass, int pageNum) {
-        return baseDao.listAll(entityClass, pageNum, Constants.DEFAULT_PAGE_SIZE);
+    public List<T> findByCond(T cond,String sortName, String sortOrder, int pageNum) {
+        return baseDao.findByCond(cond, sortName, sortOrder ,pageNum, Constants.DEFAULT_PAGE_SIZE);
     }
     
     /**
      * 分页查询
+     * @param cond 查询对象
+     * @param sortName 排序字段
+     * @param sortOrder 排序顺序
+     * @param pageNum 页数
+     * @param pageSize 每页大小
+     * @return 自定义分页对象
      */
     @Override
-    public PageList<T> listAll(Class<T> entityClass, int pageNum, int pageSize) {
-    	int total = count(entityClass);
-        List<T> list = baseDao.listAll(entityClass, pageNum, pageSize);
+    public PageList<T> findByCond(T cond, String sortName, String sortOrder, int pageNum, int pageSize) {
+    	int total = count(cond);
+        List<T> list = baseDao.findByCond(cond, sortName, sortOrder, pageNum, pageSize);
         return new PageList<T>(pageNum,pageSize,total,list);
     }
 

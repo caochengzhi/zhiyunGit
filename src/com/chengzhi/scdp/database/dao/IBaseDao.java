@@ -12,28 +12,28 @@ import java.util.List;
  */
 public interface IBaseDao<T extends AbstractModel, PK extends Serializable>{
     
-    public T save(T model);
+     T save(T model);
 
-    public void saveOrUpdate(T model);
+     void saveOrUpdate(T model);
     
-    public void update(T model);
+     void update(T model);
     
-    public void updateWithSql(String sql);
+     void updateWithSql(String sql);
     
-    public void merge(T model);
+     void merge(T model);
 
-    public void delete(Class<T> entityClass, PK id);
+     void delete(Class<T> entityClass, PK id);
 
-    public void deleteObject(T model);
+     void deleteObject(T model);
+     
+     List<T> findByProperty(Class<T> entityClass, String propertyName, Object value);
 
-    public T get(Class<T> entityClass, PK id);
+     T get(Class<T> entityClass, PK id);
     
-    public int count(Class<T> entityClass);
+     int count(T cond);
     
-    public List<T> listAll(Class<T> entityClass);
+     List<T> findByCond(T cond);
     
-    public List<T> listAll(Class<T> entityClass, int pn);
-    
-    public List<T> listAll(Class<T> entityClass, int pn, int pageSize);
+     List<T> findByCond(T cond, String sortName,String sortOrder,int pageNum, int pageSize);
 
 }
