@@ -74,7 +74,7 @@ public class CommonInterceptor extends HandlerInterceptorAdapter{
         
         /*
          * 拦截器的配置拦截两类请求，一类是到页面的，一类是提交表单的。
-		 * 		1、当页面的请求时，生成token的名 字和token值，一份放到服务器端缓存中，一份放传给页面表单的隐藏域。
+		 * 		1、当页面的请求时，生成token的名字和token值，一份放到服务器端缓存中，一份放传给页面表单的隐藏域。
 		 * 		2、当表单请求提交时，拦截器得到参数中的tokenName和token，然后验证token值，如果能匹配上，请求就通过，不能匹配上就不通过。
 		 * 		3、可以设计防止表单重复提交本，原理服务端缓存当次请求的token，第一次提交后将服务端的当前token值清空，这样如果用户重复提交表单，传到后台服务端已经没有token值了，验证失败请求被驳回，
 		 * token值来源，只有GET请求到后台，生成一个新的token值给前台，就是每次表单提交，token值都会不同
@@ -91,7 +91,6 @@ public class CommonInterceptor extends HandlerInterceptorAdapter{
         	if(!handleToken(request, response, handler))//如果验证不通过，跳转error页面并返回false，不往下走
         		return false;
         }
-        
         return true;
 	}
 	
@@ -102,8 +101,8 @@ public class CommonInterceptor extends HandlerInterceptorAdapter{
 	@Override
 	public void postHandle(HttpServletRequest request,HttpServletResponse response, Object handler,ModelAndView modelAndView) 
 			throws Exception {
-        if(modelAndView != null)  //加入当前时间    
-            modelAndView.addObject("currentTime", new DateTimeUtil().toString("yyyy-mm-dd hh:mi hh24:mi:ss"));    
+//        if(modelAndView != null)  //加入当前时间    
+//            modelAndView.addObject("currentTime", new DateTimeUtil().toString("yyyy-mm-dd hh:mi hh24:mi:ss"));    
 	}
 	
 	/**  

@@ -1,8 +1,8 @@
 package com.chengzhi.scdp.common;
 
-import java.io.Serializable;
+import io.jsonwebtoken.Claims;
 
-import com.chengzhi.scdp.system.dao.Users;
+import java.io.Serializable;
 
 /**
  * 为每个请求，分配一个本地线程变量，用来存放当前线程的用户
@@ -12,23 +12,23 @@ import com.chengzhi.scdp.system.dao.Users;
 public class ThreadLocalFactory implements Serializable{
 	private static final long serialVersionUID = -9195740682090109513L;
 	
-	static ThreadLocal<Users> threadLocal = null;
+	static ThreadLocal<Claims> threadLocal = null;
 	
-	private static ThreadLocal<Users> getCurrentThread(){
+	private static ThreadLocal<Claims> getCurrentThread(){
 		if(threadLocal == null)
-			threadLocal = new ThreadLocal<Users>();
+			threadLocal = new ThreadLocal<Claims>();
 		return threadLocal;
 	}
-	 
-	public static void setSysUser(Users user){
-		getCurrentThread().set(user);
+	
+	public static void setUserToken(Claims token){
+		getCurrentThread().set(token);
 	}
 	
-	public static Users getCurrentSysUser(){
+	public static Claims getCurrentUserToken(){
 		return getCurrentThread().get();
 	}
 	
-	public static void removeSysUser(){
+	public static void removeUserToken(){
 		getCurrentThread().remove();
 	}
 

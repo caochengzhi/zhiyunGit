@@ -36,7 +36,7 @@ public class CustomExceptionResolver extends HandlerExceptionResolverComposite{
         
         //向前台返回错误信息
         ModelAndView modelAndView = new ModelAndView();
-        modelAndView.addObject("errorMsg", customException.getMessage());
+        modelAndView.addObject("errorMsg", "<a href=\"javascript:history.back(-1)\">返回地球🌎</a>,"+customException.getMessage());
         modelAndView.setViewName("/error/error");//对应到的是jsp/error/error.jsp页面
         return modelAndView;
 	}

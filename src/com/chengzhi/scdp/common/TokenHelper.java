@@ -150,8 +150,8 @@ public class TokenHelper{
         String tokenKey = buildTokenCacheAttributeName(tokenName);
         if(cacheToken.get(tokenKey) == null)
         	return false;
-        cacheToken.remove(tokenKey);
         
+        cacheToken.remove(tokenKey);
         return true;
     }
     

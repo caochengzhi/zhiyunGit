@@ -59,7 +59,7 @@ public class JavaWebToken {
     	JwtBuilder builder = Jwts.builder().setClaims(claims)
     			.signWith(SignatureAlgorithm.HS512, getKeyInstance());
     	
-    	//如何知道超时时间的话，就设置token超时时间
+    	//如果知道超时时间的话，就设置token超时时间
     	if (outTimeMillis != null && outTimeMillis >= 0) {
     		long expMillis = System.currentTimeMillis() + outTimeMillis;
     		Date exp = new Date(expMillis);
