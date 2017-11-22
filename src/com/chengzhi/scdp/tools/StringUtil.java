@@ -1,7 +1,11 @@
 package com.chengzhi.scdp.tools;
 
+import java.io.IOException;
+import java.io.PrintWriter;
+import java.io.StringWriter;
 import java.util.StringTokenizer;
 
+import org.apache.log4j.Logger;
 import org.apache.poi.hssf.usermodel.HSSFCell;
 import org.apache.poi.hssf.usermodel.HSSFDateUtil;
 
@@ -509,4 +513,34 @@ public class StringUtil {
        }     
        return cellValue;     
    }     
+   
+    /**
+     * 讲异常堆栈信息写入日志中
+     * @param logger
+     * @param exception
+     */
+   public static void writeStackTraceToLog(Logger logger,Exception e){
+	   StringWriter sw = null;
+	   PrintWriter pw = null;
+	   try{
+		   sw = new StringWriter();
+           pw =  new PrintWriter(sw);
+		   e.printStackTrace(pw);
+		   pw.flush();
+           sw.flush();
+	   }finally{
+		   if (sw != null) {
+               try {
+                   sw.close();
+               } catch (IOException e1) {
+                   e1.printStackTrace();
+               }
+           }
+           if (pw != null) {
+               pw.close();
+           }
+	   }
+	   logger.error(sw.toString());
+   }
+   
 }

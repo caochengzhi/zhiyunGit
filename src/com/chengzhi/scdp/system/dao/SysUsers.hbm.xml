@@ -3,7 +3,7 @@
 "http://www.hibernate.org/dtd/hibernate-mapping-3.0.dtd">
 <!-- Generated 2017-9-24 18:55:18 by Hibernate Tools 3.2.2.GA -->
 <hibernate-mapping>
-    <class name="com.chengzhi.scdp.system.dao.Users" table="users" catalog="sdsdb">
+    <class name="com.chengzhi.scdp.system.dao.SysUsers" table="sys_users" catalog="sdsdb">
         <id name="userId" type="java.lang.Long">
             <column name="user_id" />
             <generator class="identity" />
@@ -23,11 +23,17 @@
         <property name="phoneNumber" type="java.lang.String">
             <column name="phone_number" length="20" />
         </property>
+        <property name="email" type="java.lang.String">
+            <column name="email" length="100" />
+        </property>
         <property name="isValid" type="java.lang.Character">
             <column name="is_valid" length="1" />
         </property>
         <property name="createDate" type="java.util.Date">
-            <column name="create_date" length="19" not-null="true" />
+            <column name="create_date" length="19"/>
+        </property>
+        <property name="lastUpdateDate" type="java.lang.String">
+            <column name="last_update_date" length="20" />
         </property>
         <property name="creater" type="java.lang.String">
             <column name="creater" length="100" not-null="true" />

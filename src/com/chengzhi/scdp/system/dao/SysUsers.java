@@ -4,7 +4,7 @@ import java.util.Date;
 
 import com.chengzhi.scdp.database.dao.AbstractModel;
 
-public class Users extends AbstractModel {
+public class SysUsers extends AbstractModel {
 
 	private static final long serialVersionUID = 1613113405175819652L;
 	private Long userId;
@@ -14,14 +14,16 @@ public class Users extends AbstractModel {
 	private Character sex;
 	private String phoneNumber;
 	private Character isValid;
+	private String email;
 	private Date createDate;
+	private String lastUpdateDate;
 	private String creater;
 	private Long organizationId;
 
-	public Users() {
+	public SysUsers() {
 	}
 
-	public Users(String loginName, String loginPassword, String userName,
+	public SysUsers(String loginName, String loginPassword, String userName,
 			Date createDate, String creater, long organizationId) {
 		this.loginName = loginName;
 		this.loginPassword = loginPassword;
@@ -31,17 +33,29 @@ public class Users extends AbstractModel {
 		this.organizationId = organizationId;
 	}
 
-	public Users(String loginName, String loginPassword, String userName,
-			Character sex, String phoneNumber, Character isValid,
-			Date createDate, String creater, long organizationId) {
+	public SysUsers(String loginName, String loginPassword, long organizationId) {
 		this.loginName = loginName;
 		this.loginPassword = loginPassword;
-		this.userName = userName;
-		this.sex = sex;
-		this.phoneNumber = phoneNumber;
-		this.isValid = isValid;
-		this.createDate = createDate;
-		this.creater = creater;
+		this.organizationId = organizationId;
+	}
+
+	public String getLastUpdateDate() {
+		return lastUpdateDate;
+	}
+
+	public void setLastUpdateDate(String lastUpdateDate) {
+		this.lastUpdateDate = lastUpdateDate;
+	}
+
+	public String getEmail() {
+		return email;
+	}
+
+	public void setEmail(String email) {
+		this.email = email;
+	}
+
+	public void setOrganizationId(Long organizationId) {
 		this.organizationId = organizationId;
 	}
 
@@ -119,10 +133,6 @@ public class Users extends AbstractModel {
 
 	public Long getOrganizationId() {
 		return this.organizationId;
-	}
-
-	public void setOrganizationId(long organizationId) {
-		this.organizationId = organizationId;
 	}
 
 }

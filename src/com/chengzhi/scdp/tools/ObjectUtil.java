@@ -5,13 +5,17 @@ import java.lang.reflect.Method;
 import java.math.BigDecimal;
 import java.sql.Timestamp;
 import java.util.Date;
+import java.util.HashSet;
 import java.util.Iterator;
 import java.util.Map;
+import java.util.Set;
 
-import org.apache.commons.beanutils.PropertyUtils;
 import org.apache.log4j.Logger;
 import org.hibernate.Criteria;
 import org.hibernate.criterion.Restrictions;
+import org.springframework.beans.BeanUtils;
+import org.springframework.beans.BeanWrapper;
+import org.springframework.beans.BeanWrapperImpl;
 
 public class ObjectUtil {
 	private static Logger logger = Logger.getLogger(ObjectUtil.class);
@@ -26,7 +30,8 @@ public class ObjectUtil {
 		for(Iterator<Field> it = fieldMap.values().iterator();it.hasNext();){
 			Field field = it.next();
 			Method method = BaseDataCache.getGetMethod(cond.getClass(), field.getName());
-			setCondValue(method, field, cond, c);
+			if(method != null)
+				setCondValue(method, field, cond, c);
 		}
 	}
 	
@@ -41,26 +46,26 @@ public class ObjectUtil {
 		String type = field.getType().getName();
 		try{
 			String fieldName = field.getName().toLowerCase();
-			Object obj = method.invoke(cond, null);
-			if(obj == null)
+			Object obj = method.invoke(cond);
+			if(obj == null || StringUtil.isNullOrEmpty(obj.toString()))
 				return;
 			
-			String value = (String)obj;
 			if(fieldName.endsWith("notisnull")){
-				if("Y".equalsIgnoreCase(value)){
+				if("Y".equalsIgnoreCase((String)obj)){
 					String fieldNameNotIsNull = field.getName();
 					String _fieldName  = fieldNameNotIsNull.substring(0, fieldNameNotIsNull.length()-9);
 					c.add(Restrictions.isNotNull(_fieldName));
 				}
 			}
 			else if(fieldName.endsWith("isnull") && !fieldName.endsWith("notisnull")){
-				if("Y".equalsIgnoreCase(value)){
+				if("Y".equalsIgnoreCase((String)obj)){
 					String fieldNameIsNull = field.getName();
 					String _fieldName = fieldNameIsNull.substring(0, fieldNameIsNull.length()-6);
 					c.add(Restrictions.isNull(_fieldName));
 				}
 			}
 			else if("java.lang.String".equals(type)){
+				String value = (String)obj;
 				String _fieldName = field.getName();
 				if(fieldName.endsWith("$like")){
 					if(!value.startsWith("%"))
@@ -171,12 +176,24 @@ public class ObjectUtil {
 	}
 	
 	/**
-	 * 对象拷贝
-	 * @param dest 目标对象
-	 * @param orig 源对象
+	 * 对象非空属性拷贝
+	 * @param target 目标对象
+	 * @param src 源对象
 	 */
-	public static void copyProperties(Object dest,Object orig)throws Exception{
-		PropertyUtils.copyProperties(dest, orig);
-	}
+    public static void copyPropertiesIgnoreNull(Object src, Object target){
+        BeanUtils.copyProperties(src, target, getNullPropertyNames(src));
+    }
 
+    private static String[] getNullPropertyNames (Object source) {
+        final BeanWrapper src = new BeanWrapperImpl(source);
+        java.beans.PropertyDescriptor[] pds = src.getPropertyDescriptors();
+
+        Set<String> emptyNames = new HashSet<String>();
+        for(java.beans.PropertyDescriptor pd : pds) {
+            Object srcValue = src.getPropertyValue(pd.getName());
+            if (srcValue == null) emptyNames.add(pd.getName());
+        }
+        String[] result = new String[emptyNames.size()];
+        return emptyNames.toArray(result);
+    }
 }

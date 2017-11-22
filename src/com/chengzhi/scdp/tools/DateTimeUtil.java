@@ -22,6 +22,7 @@ public class DateTimeUtil {
 	public static final int FLD_SECOND = Calendar.SECOND;
 	public static final int FLD_MILLISECOND = Calendar.MILLISECOND;
 	public static final String DATE_FORMAT_YYYY_MM_DD = "yyyy-MM-dd";
+	public static final String DATE_FORMAT = "yyyy-MM-dd hh24:mi:ss";
 
 	public static Date strToDate(String str, String format) {
 		SimpleDateFormat sf = new SimpleDateFormat(format);
@@ -93,6 +94,10 @@ public class DateTimeUtil {
 		DateTimeUtil date = new DateTimeUtil();
 		date.parse2(src, format);
 		return date;
+	}
+	
+	public static String getLastUpdateDate(){
+		return new DateTimeUtil().toString(DATE_FORMAT);
 	}
 
 	public int getYear() {
