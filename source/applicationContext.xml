@@ -1,0 +1,73 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+    xmlns:context="http://www.springframework.org/schema/context"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xmlns:tx="http://www.springframework.org/schema/tx"
+    xmlns:aop="http://www.springframework.org/schema/aop"
+    xsi:schemaLocation="http://www.springframework.org/schema/beans     
+        http://www.springframework.org/schema/beans/spring-beans-4.3.xsd
+        http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context-4.3.xsd
+        http://www.springframework.org/schema/aop http://www.springframework.org/schema/aop/spring-aop-4.3.xsd
+        http://www.springframework.org/schema/tx http://www.springframework.org/schema/tx/spring-tx-4.3.xsd">
+        
+	<!-- 该配置文件只加载除表现层之外的所有bean，因此需要如下配置,通过exclude-filter 把所有 @Controller注解的表现层控制器组件排除 -->
+    <context:component-scan base-package="com.chengzhi.scdp">  
+    	<context:exclude-filter type="annotation" expression="org.springframework.stereotype.Controller"/> 
+	</context:component-scan>
+	
+    <!-- 加载资源文件，其中包含变量信息，必须在Spring配置文件的最前面加载，即第一个加载-->
+    <context:property-placeholder location="classpath:proxool.properties" />
+    
+    <!-- 指定数据源 -->
+   <bean id="dataSource" class="org.logicalcobwebs.proxool.ProxoolDataSource">  
+	    <property name="alias" value="${proxool.alias}"/>
+		<property name="driver" value="${driver}" />
+		<property name="driverUrl" value="${url}" />
+		<property name="user" value="${username}" />
+		<property name="password" value="${password}" />
+		<property name="maximumActiveTime" value="${proxool.maximum-active-time}"/>
+		<property name="prototypeCount" value="${proxool.prototype-count}"/>
+		<property name="simultaneousBuildThrottle" value="${proxool.simultaneous-build-throttle}"/>
+		<property name="minimumConnectionCount" value="${proxool.minimum-connection-count}"/>
+		<property name="maximumConnectionCount" value="${proxool.maximum-connection-count}"/>
+		<property name="houseKeepingSleepTime" value="${proxool.house-keeping-sleep-time}"/>
+		<property name="recentlyStartedThreshold" value="${proxool.recently-started-threshold}"/>
+		<property name="houseKeepingTestSql" value="${proxool.house-keeping-test-sql}" />
+	</bean>  
+   
+    <bean id="sessionFactory" class="org.springframework.orm.hibernate4.LocalSessionFactoryBean">
+        <property name="dataSource" ref="dataSource" />
+        <property name="configLocations" value="classpath:hibernate.cfg.xml"/>
+    </bean>
+   
+    <!-- 配置Hibernate事务管理器 -->
+    <bean id="transactionManager" class="org.springframework.orm.hibernate4.HibernateTransactionManager">
+      	<property name="sessionFactory" ref="sessionFactory" />
+    </bean>
+   
+    <!-- 配置事务异常封装 -->
+    <bean id="persistenceExceptionTranslationPostProcessor" 
+       class="org.springframework.dao.annotation.PersistenceExceptionTranslationPostProcessor" />
+   
+   <!--  声明式容器事务管理 ,transaction-manager指定事务管理器为transactionManager -->
+    <tx:advice id="txAdvice" transaction-manager="transactionManager">
+        <tx:attributes>
+            <tx:method name="save*"   propagation="REQUIRED" read-only="false" rollback-for="com.chengzhi.scdp.common.CustomException"/>
+            <tx:method name="update*" propagation="REQUIRED" read-only="false" rollback-for="com.chengzhi.scdp.common.CustomException"/>
+            <tx:method name="delete*" propagation="REQUIRED" read-only="false" rollback-for="com.chengzhi.scdp.common.CustomException"/>
+            <tx:method name="modify*" propagation="REQUIRED" read-only="false" rollback-for="com.chengzhi.scdp.common.CustomException"/>
+            <tx:method name="remove*" propagation="REQUIRED" read-only="false" rollback-for="com.chengzhi.scdp.common.CustomException"/>     
+            <tx:method name="add*"    propagation="REQUIRED" read-only="false" rollback-for="com.chengzhi.scdp.common.CustomException"/>
+            <tx:method name="find*"   propagation="REQUIRED" read-only="true"/>
+            <tx:method name="get*"    propagation="REQUIRED" read-only="true"/>
+            <tx:method name="*" propagation="SUPPORTS" read-only="true" />
+        </tx:attributes>
+    </tx:advice>
+    
+    <aop:config expose-proxy="true">
+        <!-- 只对业务逻辑层实施事务 -->
+        <aop:pointcut id="txPointcut" expression="execution(* com.chengzhi.scdp.*.service.*.*(..))" />
+        <aop:advisor pointcut-ref="txPointcut" advice-ref="txAdvice"/>
+    </aop:config>
+    
+</beans>
