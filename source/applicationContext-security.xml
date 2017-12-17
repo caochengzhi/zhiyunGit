@@ -1,0 +1,76 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+    xmlns:context="http://www.springframework.org/schema/context"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xmlns:tx="http://www.springframework.org/schema/tx"
+    xmlns:util="http://www.springframework.org/schema/util"
+    xmlns:aop="http://www.springframework.org/schema/aop"
+    xsi:schemaLocation="http://www.springframework.org/schema/beans     
+        http://www.springframework.org/schema/beans/spring-beans-4.3.xsd
+        http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context-4.3.xsd
+        http://www.springframework.org/schema/aop http://www.springframework.org/schema/aop/spring-aop-4.3.xsd
+        http://www.springframework.org/schema/tx http://www.springframework.org/schema/tx/spring-tx-4.3.xsd
+        http://www.springframework.org/schema/util http://www.springframework.org/schema/util/spring-util.xsd">
+
+<!-- 
+	代码说明：
+	1、shiroFilter 中 loginUrl 为登录页面地址，successUrl 为登录成功页面地址（如果首先访问受保护 URL 登录成功，则跳转到实际访问页面），unauthorizedUrl 认证未通过访问的页面（前面提到的“未经授权页面”）。
+	2、shiroFilter 中 filters 属性，formAuthenticationFilter 配置为基于表单认证的过滤器。
+	3、shiroFilter 中 filterChainDefinitions 属性：
+		authc表示,这这个mapping代表的url需要登陆之后才能查看,需要认证,perms[SECURITY_ACCOUNT_VIEW] 表示用户需要提供值为“SECURITY_ACCOUNT_VIEW”Permission 信息
+		anon表示,这个mapping代表的url全部放行,匿名访问（不需要认证与授权）,所以可以看到所有js文件与image文件都被放行了
+		logout 表示这个mapping代表的url将进行一次注销操作,在浏览器客户端进行的是session的注销,在服务器端则是进行缓存的删除
+	4、securityManager 中 realm 属性，配置为我们自己实现的 Realm。
+	5、myShiroRealm 为我们自己需要实现的 Realm 类，为了减小数据库压力，添加了缓存机制。
+	url模式使用Ant风格模式
+	Ant路径通配符支持?、*、**，注意通配符匹配不包括目录分隔符“/”：
+	?：匹配一个字符，如”/admin?”将匹配/admin1，但不匹配/admin或/admin2；
+	*：匹配零个或多个字符串，如/admin*将匹配/admin、/admin123，但不匹配/admin/1；
+	**：匹配路径中的零个或多个路径，如/admin/**将匹配/admin/a或/admin/a/b。
+ -->
+	<bean id="shiroFilter" class="org.apache.shiro.spring.web.ShiroFilterFactoryBean">
+	    <property name="securityManager" ref="securityManager"/>
+	    <property name="loginUrl" value="/login/verify"/>
+	    <property name="successUrl" value="/jsp/main.jsp"/>
+	    <property name="unauthorizedUrl" value="/jsp/error/error.jsp"/>
+		<property name="filters"> 
+	      <util:map> 
+	         <entry key="authc" value-ref="formAuthenticationFilter"/>
+	      </util:map> 
+	   </property>
+	    <property name="filterChainDefinitions">
+	        <value>
+		         /=anon
+	             /login/logout = logout
+	             /authImage = anon
+	             /login/checkCode = anon
+	             /js/** = anon
+	             /css/**=anon
+	             /images/**=anon
+	              /** = authc
+	        </value>
+	    </property>
+	</bean>
+	
+	<!-- 安全管理器 -->
+	<bean id="securityManager" class="org.apache.shiro.web.mgt.DefaultWebSecurityManager">
+		<property name="realm" ref="myShiroRealm"/>
+		<property name="sessionMode" value="native" />
+	</bean>
+	
+	<bean id="myShiroRealm" class="com.chengzhi.scdp.security.MyShiroRealm"/> 
+	
+	<!-- 缓存管理器 使用Ehcache实现 -->  
+	<!-- <bean id="cacheManager" class="org.apache.shiro.cache.ehcache.EhCacheManager">  
+	    <property name="cacheManagerConfigFile" value="classpath:ehcache.xml" />  
+	</bean>  -->
+
+	<bean id="formAuthenticationFilter"  class="com.chengzhi.scdp.security.beans.CaptchaFormAuthenticationFilter"/>
+	
+	<!-- Shiro生命周期处理器 -->
+	<bean id="lifecycleBeanPostProcessor" class="org.apache.shiro.spring.LifecycleBeanPostProcessor"/>
+    <bean class="org.apache.shiro.spring.security.interceptor.AuthorizationAttributeSourceAdvisor">
+	    <property name="securityManager" ref="securityManager"/>
+	</bean>
+	
+</beans>
