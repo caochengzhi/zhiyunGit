@@ -1,4 +1,6 @@
 <%@page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
+
+<%@page import="com.chengzhi.scdp.Constants" %>
 <html lang="zh-CN">
 <head>
 <meta charset="utf-8">
@@ -17,7 +19,6 @@
 </head>
 
 <body>
-
 	<!-- Top content -->
 	<div class="top-content">
 		<div class="container">
@@ -43,33 +44,45 @@
 						</div>
 					</div>
 					<div class="form-bottom">
-						<form role="form" action="login/Verification" method="post" class="login-form">
-							<div class="form-group" id="orguidgroup">
-								<label>企业号</label>
-								<div class="input-group">
-									<span class="input-group-addon"> <span class="glyphicon glyphicon-home"></span></span>
-								    <input id="signin-orguid" type="text" class="form-control" placeholder="企业号" data-toggle="dropdown">
-								</div>
-							</div>
-
+						<form id="myform" role="form" action="login/verify" method="post" class="login-form">
 							<div class="form-group">
 								<label>登录名</label>
 								<div class="input-group">
 									<span class="input-group-addon"> <span class="glyphicon glyphicon-user"></span></span> 
-									<input id="signin-name" type="text" name="username" class="form-control" placeholder="登录账号">
+									<input type="text" name="username" class="form-control" placeholder="登录账号">
 								</div>
 							</div>
-
 
 							<div class="form-group">
 								<label>密&nbsp;&nbsp;&nbsp;码</label>
 								<div class="input-group">
 									<span class="input-group-addon"> <span class="glyphicon glyphicon-lock"></span></span> 
-									<input id="signin-pass" type="password" name="password" class="form-control" placeholder="登录密码">
+									<input type="password" name="password" class="form-control" placeholder="登录密码">
 								</div>
 							</div>
 							
+							<div class="form-group" id="orguidgroup">
+								<label>企业号</label>
+								<div class="input-group">
+									<span class="input-group-addon"> <span class="glyphicon glyphicon-home"></span></span>
+								    <input type="text" name="organizationId" class="form-control" placeholder="企业号">
+								</div>
+							</div>
+							
+							<div class="form-group" id="orguidgroup">
+								<label>验证码</label>
+								<div class="input-group">
+									<span class="input-group-addon"> <span class="glyphicon glyphicon-check"></span></span>
+								    <input type="text" name="captcha" id="kaptcha" class="form-control" placeholder="验证码">
+								</div>
+								<img src="authImage" width="120" id="verifyImage" title="看不清，点击换一张" /> 
+							    <br><small>看不清，点击换一张</small>
+							</div>
+
 							<button type="submit" class="btn-success btn">登&nbsp;&nbsp;&nbsp;录</button>
+							<b style="color: red;">${errorMsg}</b>
+							<input type="hidden" name="<%=Constants.TOKEN_NAME%>" value="<%=request.getAttribute(Constants.TOKEN_NAME)%>"/>
+							<input type="hidden" name="<%=request.getAttribute(Constants.TOKEN_NAME)%>" value="<%=request.getAttribute(Constants.TOKEN)%>"/>  
 						</form>
 					</div>
 				</div>
@@ -78,15 +91,53 @@
 	</div>
 
 	<!-- Javascript -->
-	<script src="js/jquery/jquery-3.2.1.min.js"></script>
-	<script src="js/bootstrap3.3.7/js/bootstrap.min.js"></script>
-	<script src="js/assets/js/jquery.backstretch.min.js"></script>
-	<script src="js/assets/js/scripts.js"></script>
-
-	<!--[if lt IE 10]>
-            <script src="js/assets/js/placeholder.js"></script>
-        <![endif]-->
-
+	<script type="text/javascript" src="js/jquery/jquery-3.2.1.min.js"></script>
+	<script type="text/javascript" src="js/bootstrap3.3.7/js/bootstrap.min.js"></script>
+	<script type="text/javascript" src="js/assets/js/jquery.backstretch.min.js"></script>
+	<script type="text/javascript" src="js/assets/js/scripts.js"></script>
+	<script type="text/javascript" src="js/bootstrap3.3.7/js/bootstrapValidator.min.js"></script>
+	<script type="text/javascript">
+		$(document).ready(function() {
+			 $('#myform').bootstrapValidator({
+			        container: 'tooltip',
+			        fields: {
+			        	organizationId: {
+			        		validators: {
+			                    digits: {
+			                        message: '企业号必须为数字类型!'
+			                    }
+			                }
+			            }
+			        }
+			 })
+		
+		})
+	</script>
+	
+	<script type="text/javascript">
+		$('#verifyImage').click(function() {
+	        $(this).attr('src','authImage?' + Math.floor(Math.random() * 100));
+	    });
+	    
+	    $('#kaptcha').bind({ 
+	        blur:function(){
+	            var params  ={
+	                kaptcha:this.value                    
+	            };
+	            $.ajax({
+	                 type: "POST",
+	                 url: "login/checkCode",
+	                 data: {verityCode:params.kaptcha},
+	                 dataType: "json",
+	                 success: function(data){
+	                	 alert(data);
+	                	 if(data.msg==-1)
+	                        $('#kaptcha').val('');
+	                 }
+	             });
+	        } 
+	    });
+	</script>
 </body>
 
 </html>
