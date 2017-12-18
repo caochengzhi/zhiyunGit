@@ -30,8 +30,8 @@
  -->
 	<bean id="shiroFilter" class="org.apache.shiro.spring.web.ShiroFilterFactoryBean">
 	    <property name="securityManager" ref="securityManager"/>
-	    <property name="loginUrl" value="/login/verify"/>
-	    <property name="successUrl" value="/jsp/main.jsp"/>
+	    <property name="loginUrl" value="/login"/>
+	    <property name="successUrl" value="/index"/>
 	    <property name="unauthorizedUrl" value="/jsp/error/error.jsp"/>
 		<property name="filters"> 
 	      <util:map> 
@@ -43,11 +43,11 @@
 		         /=anon
 	             /login/logout = logout
 	             /authImage = anon
-	             /login/checkCode = anon
+	             /checkKaptcha = anon
 	             /js/** = anon
 	             /css/**=anon
 	             /images/**=anon
-	              /** = authc
+	             /** = authc
 	        </value>
 	    </property>
 	</bean>
@@ -58,14 +58,14 @@
 		<property name="sessionMode" value="native" />
 	</bean>
 	
-	<bean id="myShiroRealm" class="com.chengzhi.scdp.security.MyShiroRealm"/> 
+	<bean id="myShiroRealm" class="com.chengzhi.scdp.security.beans.CustomRealm"/> 
 	
 	<!-- 缓存管理器 使用Ehcache实现 -->  
 	<!-- <bean id="cacheManager" class="org.apache.shiro.cache.ehcache.EhCacheManager">  
 	    <property name="cacheManagerConfigFile" value="classpath:ehcache.xml" />  
 	</bean>  -->
 
-	<bean id="formAuthenticationFilter"  class="com.chengzhi.scdp.security.beans.CaptchaFormAuthenticationFilter"/>
+	<bean id="formAuthenticationFilter"  class="com.chengzhi.scdp.security.MyFormAuthenticationFilter"/>
 	
 	<!-- Shiro生命周期处理器 -->
 	<bean id="lifecycleBeanPostProcessor" class="org.apache.shiro.spring.LifecycleBeanPostProcessor"/>
