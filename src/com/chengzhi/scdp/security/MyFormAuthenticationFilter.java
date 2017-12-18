@@ -1,4 +1,4 @@
-package com.chengzhi.scdp.security.beans;
+package com.chengzhi.scdp.security;
 
 import javax.servlet.ServletRequest;
 import javax.servlet.ServletResponse;
@@ -11,6 +11,7 @@ import org.apache.shiro.web.util.WebUtils;
 
 import com.chengzhi.scdp.Constants;
 import com.chengzhi.scdp.common.Exceptions.IncorrectCaptchaException;
+import com.chengzhi.scdp.security.beans.CaptchaUsernamePasswordToken;
 
 /**
  * 扩展 FormAuthenticationFilter类，首先覆盖 createToken方法，以便获取CaptchaUsernamePasswordToken实例；
@@ -19,7 +20,7 @@ import com.chengzhi.scdp.common.Exceptions.IncorrectCaptchaException;
  * @author beisi
  *
  */
-public class CaptchaFormAuthenticationFilter extends FormAuthenticationFilter{
+public class MyFormAuthenticationFilter extends FormAuthenticationFilter{
 	
 	/**
 	 * 获取验证码值
