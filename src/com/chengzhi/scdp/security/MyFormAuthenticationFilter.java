@@ -3,15 +3,17 @@ package com.chengzhi.scdp.security;
 import javax.servlet.ServletRequest;
 import javax.servlet.ServletResponse;
 import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpSession;
 
+import org.apache.log4j.Logger;
 import org.apache.shiro.authc.AuthenticationException;
 import org.apache.shiro.subject.Subject;
 import org.apache.shiro.web.filter.authc.FormAuthenticationFilter;
 import org.apache.shiro.web.util.WebUtils;
 
 import com.chengzhi.scdp.Constants;
-import com.chengzhi.scdp.common.Exceptions.IncorrectCaptchaException;
 import com.chengzhi.scdp.security.beans.CaptchaUsernamePasswordToken;
+import com.chengzhi.scdp.system.dao.SysUsers;
 
 /**
  * 扩展 FormAuthenticationFilter类，首先覆盖 createToken方法，以便获取CaptchaUsernamePasswordToken实例；
@@ -21,7 +23,7 @@ import com.chengzhi.scdp.security.beans.CaptchaUsernamePasswordToken;
  *
  */
 public class MyFormAuthenticationFilter extends FormAuthenticationFilter{
-	
+	private static Logger logger = Logger.getLogger(MyFormAuthenticationFilter.class);
 	/**
 	 * 获取验证码值
 	 * @param request
@@ -43,15 +45,83 @@ public class MyFormAuthenticationFilter extends FormAuthenticationFilter{
 		else
 			return null;
 	}
+	
+	
+	/**
+     * 每次被authc拦截的url都会到这里来，这里用来处理 不注销之前已登录用户下，再次登录
+     */
+	@Override
+	protected boolean isAccessAllowed(ServletRequest request,ServletResponse response, Object mappedValue) {
+		logger.info("*************isAccessAllowed***************");
+		if(isLoginRequest(request, response)){
+			
+			if(isLoginSubmission(request, response)){
+				//本次用户登陆账号
+                String account = this.getUsername(request);
+                
+                //之前登陆的用户
+                Subject subject = this.getSubject(request, response);
+                SysUsers user = (SysUsers) subject.getPrincipal();
+                //如果两次登陆的用户不一样，则先退出之前登陆的用户,（有问题，相同用户无法跳转页面）解决：可以不判断，都退出之前的登录，再重新登录
+                if (account != null && user != null && !account.equals(user.getUserName())){
+                    //获取session，获取验证码
+                    HttpServletRequest httpServletRequest = (HttpServletRequest)request;
+                    HttpSession session= httpServletRequest.getSession();
+                    String sRand = (String) session.getAttribute(Constants.KAPTCHA_SESSION_KEY);
+                    //注销登录，同时会使session失效
+                    subject.logout();
+                    //所以重新设置session
+                    HttpSession session1= httpServletRequest.getSession();
+                    session1.setAttribute(Constants.KAPTCHA_SESSION_KEY, sRand);
+                }
+			}
+		}
+		return super.isAccessAllowed(request, response, mappedValue);
+	}
+
+	/**
+     * 用户自定义验证方法，这里用来做验证码及账套的验证
+     * 此方法第一次登录会进来，执行executeLogin方法前执行，验证通过返回false，验证不通过返回true
+     * 验证失败，不会去执行executeLogin方法
+     */
+	@Override
+	protected boolean onAccessDenied(ServletRequest request,ServletResponse response) throws Exception {
+		logger.info("*************onAccessDenied***************");
+		
+		HttpServletRequest httpServletRequest=(HttpServletRequest) request;
+		
+		//从session获取验证码，正确的验证码
+        HttpSession session=httpServletRequest.getSession();
+        String validate =(String) session.getAttribute(Constants.KAPTCHA_SESSION_KEY);
+        
+        //获取输入的验证码,验证失败，设置错误信息
+        String myValidate = getCaptcha(request); 
+        if (validate != null && myValidate != null && !validate.equalsIgnoreCase(myValidate)) {
+            httpServletRequest.setAttribute(FormAuthenticationFilter.DEFAULT_ERROR_KEY_ATTRIBUTE_NAME, "IncorrectCaptchaException");
+            //拒绝访问
+            return true;
+        }
+        
+        //组织号为空，验证失败，设置错误信息
+        Long organizationId = getOrganizationId(request);
+        if(organizationId == null){
+        	httpServletRequest.setAttribute(FormAuthenticationFilter.DEFAULT_ERROR_KEY_ATTRIBUTE_NAME, "OrganizationException");
+            //拒绝访问
+            return true;
+        }
+        	
+        return super.onAccessDenied(request, response);
+	}
 
 	/**
 	 * 登录认证
 	 */
 	@Override
 	protected boolean executeLogin(ServletRequest request,ServletResponse response) throws Exception {
+		logger.info("*************executeLogin***************");
+		
 		CaptchaUsernamePasswordToken token = createToken(request, response);
 		try {
-			doCaptchaValidate((HttpServletRequest) request, token);
 			Subject subject = getSubject(request, response);
 			subject.login(token);
 			return onLoginSuccess(token, subject, request, response);
@@ -70,18 +140,4 @@ public class MyFormAuthenticationFilter extends FormAuthenticationFilter{
 		return new CaptchaUsernamePasswordToken(loginName, password, organizationId, rememberMe, captcha);
 	}
 	
-	/**
-	 * 验证码和组织号校验
-	 * @param request
-	 * @param token
-	 */
-	protected void doCaptchaValidate( HttpServletRequest request,CaptchaUsernamePasswordToken token){ 
-		Object captcha = request.getSession().getAttribute(Constants.KAPTCHA_SESSION_KEY); 
-		if( captcha != null && !captcha.toString().equalsIgnoreCase(token.getCaptcha())){ 
-			throw new IncorrectCaptchaException ("验证码错误！"); 
-		}else if(token.getOrganiaztionId() == null){
-			throw new IncorrectCaptchaException ("组织号为空！"); 
-		}
-	}
-
 }
