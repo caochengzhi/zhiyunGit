@@ -1,14 +1,11 @@
 package com.chengzhi.scdp.security.beans;
 
-import java.util.Set;
-
 import org.apache.log4j.Logger;
 import org.apache.shiro.authc.AuthenticationException;
 import org.apache.shiro.authc.AuthenticationInfo;
 import org.apache.shiro.authc.AuthenticationToken;
 import org.apache.shiro.authc.SimpleAuthenticationInfo;
 import org.apache.shiro.authz.AuthorizationInfo;
-import org.apache.shiro.authz.SimpleAuthorizationInfo;
 import org.apache.shiro.realm.AuthorizingRealm;
 import org.apache.shiro.subject.PrincipalCollection;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -28,17 +25,16 @@ public class CustomRealm extends AuthorizingRealm{
 	@Autowired
 	private AbstractBusinessManager businessManager; 
 
-
 	/**
 	 * 用户登陆认证
 	 */
 	@Override
 	protected AuthenticationInfo doGetAuthenticationInfo(AuthenticationToken authcToken) throws AuthenticationException {
-		logger.info("******用户登陆认证*******"+authcToken.toString());
+		logger.info("******doGetAuthenticationInfo*******"+(String)authcToken.getPrincipal());
 		SysUsers sysUser = businessManager.queryPermissions((CaptchaUsernamePasswordToken) authcToken);
 		
 		if (sysUser != null) {
-            AuthenticationInfo authenticationInfo = new SimpleAuthenticationInfo(sysUser.getLoginName(), sysUser.getLoginPassword(), getName());
+            AuthenticationInfo authenticationInfo = new SimpleAuthenticationInfo(sysUser, sysUser.getLoginPassword(), getName());
             return authenticationInfo;
         }
         return null;
@@ -50,16 +46,8 @@ public class CustomRealm extends AuthorizingRealm{
 	 */
 	@Override
 	protected AuthorizationInfo doGetAuthorizationInfo(PrincipalCollection princi) {
-		logger.info("******用户授权认证*******"+princi.toString());
-		String loginName = (String) princi.fromRealm(getName()).iterator().next(); 
-		Set<String> names = princi.getRealmNames();
-		for(String name : names){
-			System.out.println("用户授权认证======"+name);
-		}
-		SimpleAuthorizationInfo simpleAuthorizationInfo = new SimpleAuthorizationInfo();
-		simpleAuthorizationInfo.setRoles(null);
-		simpleAuthorizationInfo.addStringPermission(loginName);
-		return simpleAuthorizationInfo;
+		logger.info("******doGetAuthorizationInfo*******");
+		return null;
 	}
 
 }
