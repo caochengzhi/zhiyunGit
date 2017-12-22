@@ -62,17 +62,11 @@ public class MyFormAuthenticationFilter extends FormAuthenticationFilter{
                 //之前登陆的用户
                 Subject subject = this.getSubject(request, response);
                 SysUsers user = (SysUsers) subject.getPrincipal();
-                //如果两次登陆的用户不一样，则先退出之前登陆的用户,（有问题，相同用户无法跳转页面）解决：可以不判断，都退出之前的登录，再重新登录
-                if (account != null && user != null && !account.equals(user.getUserName())){
-                    //获取session，获取验证码
-                    HttpServletRequest httpServletRequest = (HttpServletRequest)request;
-                    HttpSession session= httpServletRequest.getSession();
-                    String sRand = (String) session.getAttribute(Constants.KAPTCHA_SESSION_KEY);
-                    //注销登录，同时会使session失效
+                
+                //如果两次登陆的用户一样，则先退出之前登陆的用户
+                if (account != null && user != null && account.equals(user.getLoginName())){
+                    //注销登录
                     subject.logout();
-                    //所以重新设置session
-                    HttpSession session1= httpServletRequest.getSession();
-                    session1.setAttribute(Constants.KAPTCHA_SESSION_KEY, sRand);
                 }
 			}
 		}
