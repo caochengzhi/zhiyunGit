@@ -13,7 +13,6 @@ import org.springframework.web.servlet.ModelAndView;
 import org.springframework.web.servlet.handler.HandlerInterceptorAdapter;
 
 import com.chengzhi.scdp.Constants;
-import com.chengzhi.scdp.tools.DateTimeUtil;
 
 /**
  * 系统全局所有请求拦截器
@@ -47,31 +46,10 @@ public class CommonInterceptor extends HandlerInterceptorAdapter{
 	public boolean preHandle(HttpServletRequest request,HttpServletResponse response, Object handler) 
 			throws Exception {
 		log.info(request.getMethod()+"==============执行顺序: 1、preHandle================"+request.getRequestURI());
+		
 		//XSS攻击：跨站脚本攻击,设置https的cookie可以预防xss攻击
 		response.addHeader("Set-Cookie", "uid=112; Path=/; Secure; HttpOnly");
 		
-		String urlRequest = request.getRequestURI();  
-        String method = request.getMethod();  
-        
-        /*
-         * 这部分是为每次请求线程分配用户信息的，包含组织账号为多租户准备，是全局的
-         * 思路：用户过滤掉登录请求后(登录请求是产生token信息的，所以不用存储本地线程变量)，剩余其他请求都要
-         * 将包含用户信息的token保存到当前线程变量中为本次请求服务
-         * 每次请求前做token验证，验证不通过统一跳去异常页面
-         * response.sendRedirect("/scdp");
-         */
-        if(!"/scdp/login/toLogin".equals(urlRequest) && !"/scdp/login/verify".equals(urlRequest)){
-        	String userToken = (String)request.getSession().getAttribute(Constants.USER_TOKEN);
-        	TokenCheckResult check = JavaWebToken.validateJWT(userToken);
-        	if(check != null && check.getIsSucess()){
-        		ThreadLocalFactory.setUserToken(check.getClaims());
-        	}else{
-        		String returnMsg = check == null?"":check.getErrorCode();
-        		redirectUrl(request, response, Constants.ERROR_PAGE, returnMsg+",<a href=\"javascript:history.back(-1)\">返回地球🌎</a>");
-        		return false;
-        	}
-        }
-        
         /*
          * 拦截器的配置拦截两类请求，一类是到页面的，一类是提交表单的。
 		 * 		1、当页面的请求时，生成token的名字和token值，一份放到服务器端缓存中，一份放传给页面表单的隐藏域。
@@ -82,7 +60,10 @@ public class CommonInterceptor extends HandlerInterceptorAdapter{
          * 这部分是做定制化页面token校验的，开发人员可以自定义哪些请求页面或表单做token验证
          * 在一定程度上可以防止网络攻击(因为每次页面提交自带token信息，这个是动态的)，
          */
-        if(viewUrls.containsKey(urlRequest) && method.equals(viewUrls.get(urlRequest))){//get请求页面设置token
+        /*
+         * String urlRequest = request.getRequestURI();  
+         * String method = request.getMethod(); 
+         * if(viewUrls.containsKey(urlRequest) && method.equals(viewUrls.get(urlRequest))){//get请求页面设置token
         	Map<String, Object> claims = new HashMap<>(); 
         	claims.put("url", urlRequest);
         	claims.put("currentTime", new DateTimeUtil().toString("yyyy-mm-dd hh:mi hh24:mi:ss") );
@@ -90,7 +71,7 @@ public class CommonInterceptor extends HandlerInterceptorAdapter{
         }else if(actionUrls.containsKey(urlRequest) && method.equals(actionUrls.get(urlRequest))){//post提交页面获取token
         	if(!handleToken(request, response, handler))//如果验证不通过，跳转error页面并返回false，不往下走
         		return false;
-        }
+        }*/
         return true;
 	}
 	
@@ -101,8 +82,6 @@ public class CommonInterceptor extends HandlerInterceptorAdapter{
 	@Override
 	public void postHandle(HttpServletRequest request,HttpServletResponse response, Object handler,ModelAndView modelAndView) 
 			throws Exception {
-//        if(modelAndView != null)  //加入当前时间    
-//            modelAndView.addObject("currentTime", new DateTimeUtil().toString("yyyy-mm-dd hh:mi hh24:mi:ss"));    
 	}
 	
 	/**  
