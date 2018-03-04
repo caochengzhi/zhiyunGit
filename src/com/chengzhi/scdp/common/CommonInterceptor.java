@@ -13,6 +13,7 @@ import org.springframework.web.servlet.ModelAndView;
 import org.springframework.web.servlet.handler.HandlerInterceptorAdapter;
 
 import com.chengzhi.scdp.Constants;
+import com.chengzhi.scdp.common.jwt.TokenHelper;
 
 /**
  * 系统全局所有请求拦截器
@@ -91,7 +92,7 @@ public class CommonInterceptor extends HandlerInterceptorAdapter{
 	@Override
 	public void afterCompletion(HttpServletRequest request,HttpServletResponse response, Object handler, Exception ex)
 			throws Exception{
-		ThreadLocalFactory.removeUserToken();
+		ThreadLocalFactory.removeCurrenUser();
 	}
 	
 	protected boolean handleToken(HttpServletRequest request, HttpServletResponse response, Object handler) throws Exception{  

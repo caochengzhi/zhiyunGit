@@ -1,4 +1,4 @@
-package com.chengzhi.scdp.common;
+package com.chengzhi.scdp.common.jwt;
 
 import java.math.BigInteger;
 import java.util.HashMap;

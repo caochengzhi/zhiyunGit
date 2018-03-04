@@ -1,4 +1,4 @@
-package com.chengzhi.scdp.common;
+package com.chengzhi.scdp.common.jwt;
 
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.ExpiredJwtException;

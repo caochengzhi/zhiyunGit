@@ -12,7 +12,7 @@ import com.chengzhi.scdp.tools.StringUtil;
 /**
  *  利用springmvc自动异常处理组件来管理系统异常
  *  
- *  全局异常处理器处理思路：
+ *  CustomExceptionResolver为全局异常处理器,处理思路：
  *	解析出异常类型
  *	1、如果该异常类型是业务自定义的异常，直接取出异常信息，在错误页面展示
  *	2、如果该异常类型不是业务自定义的异常，构造一个自定义的异常类型（信息为“未知错误”）
@@ -24,6 +24,7 @@ public class CustomExceptionResolver extends HandlerExceptionResolverComposite{
 
 	@Override
 	public ModelAndView resolveException(HttpServletRequest request,HttpServletResponse response, Object handler, Exception ex) {
+		logger.error("**************"+ex.getMessage()+"*************");
 		StringUtil.writeStackTraceToLog(logger, ex);
 		CustomException customException = null;
 		//如果抛出的是系统自定义的异常则直接转换
