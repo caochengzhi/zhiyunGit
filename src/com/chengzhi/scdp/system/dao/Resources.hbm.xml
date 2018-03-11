@@ -14,11 +14,14 @@
         <property name="url" type="java.lang.String">
             <column name="url" length="100" not-null="true"/>
         </property>
+        <property name="code" type="java.lang.String">
+            <column name="code" length="100"/>
+        </property>
         <property name="parentId" type="java.lang.Long">
             <column name="parent_id"/>
         </property>
-        <property name="level" type="java.lang.Integer">
-            <column name="level"/>
+        <property name="type" type="java.lang.Integer">
+            <column name="type"/>
         </property>
         <property name="organizationId" type="java.lang.Long">
             <column name="organization_id" not-null="true"/>

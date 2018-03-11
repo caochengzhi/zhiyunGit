@@ -28,7 +28,7 @@ public class VerifyCodeServlet extends javax.servlet.http.HttpServlet implements
         String verifyCode = VerifyCodeUtils.generateVerifyCode(4);  
         //存入会话session  
         HttpSession session = request.getSession(true);  
-        session.setAttribute(Constants.VERIFY_SESSION_KEY, verifyCode.toLowerCase());  
+        session.setAttribute(Constants.KAPTCHA_SESSION_KEY, verifyCode.toLowerCase());  
         //生成图片  
         VerifyCodeUtils.outputImage(200, 80, response.getOutputStream(), verifyCode);  
     }  

@@ -1,6 +1,7 @@
 package com.chengzhi.scdp.system.dao;
 
 import java.util.Date;
+import java.util.List;
 
 import com.chengzhi.scdp.database.dao.AbstractModel;
 
@@ -19,7 +20,8 @@ public class SysUsers extends AbstractModel {
 	private String lastUpdateDate;
 	private String creater;
 	private Long organizationId;
-
+	private List<Roles> roles;
+	
 	public SysUsers() {
 	}
 
@@ -37,6 +39,14 @@ public class SysUsers extends AbstractModel {
 		this.loginName = loginName;
 		this.loginPassword = loginPassword;
 		this.organizationId = organizationId;
+	}
+
+	public List<Roles> getRoles() {
+		return roles;
+	}
+
+	public void setRoles(List<Roles> roles) {
+		this.roles = roles;
 	}
 
 	public String getLastUpdateDate() {

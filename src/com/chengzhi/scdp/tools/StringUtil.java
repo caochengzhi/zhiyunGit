@@ -272,25 +272,19 @@ public class StringUtil {
     }  
     
     public static void main(String[] args){   
-        //System.out.println(StringUtil.base64Encode("DRP", "GBK"));   
-        //System.out.println(StringUtil.base64Encode("12345", "GBK"));   
-        String pwd = "rYoD5I6QYEidgm/DgieDF3cEJCKBA42w";    
+//      System.out.println(StringUtil.base64Encode("DRP", "GBK"));   
+    	
+        String pwd = "123456";    
         System.out.println("pwd is :" + pwd);   
-        System.out.println("encrypt pwd is :" + StringUtil.decrypt(pwd));   
+        System.out.println("encrypt pwd is :" + StringUtil.encrypt(pwd));   
         String aa = StringUtil.encrypt(pwd);   
         System.out.println("decrypt pwd is :" + StringUtil.decrypt(aa));   
            
-//      String title = "<bean:message key=\"sysuser.title\"/>";   
-//      String[] strSrc = {"<",">","\"","\\"};   
-//      String[] strDist = {"&lt;","&gt;","&quot;","&#39;"};   
-//      System.out.println("source :" + title);   
-//      System.out.println("new:" + StringUtil.replace(title,strSrc,strDist));   
-//          
-        //StringUtil.replace(title,"<","&lt;");   
-        //StringUtil.replace(title,">","&gt;");   
-        //StringUtil.replace(title,"&","&amp;");   
-        //StringUtil.replace(title,"\"","&quot;");   
-        //StringUtil.replace(title,"\\","&#39;");   
+      /*String title = "<bean:message key=\"sysuser.title\"/>";   
+      String[] strSrc = {"<",">","\"","\\"};   
+      String[] strDist = {"&lt;","&gt;","&quot;","&#39;"};   
+      System.out.println("source :" + title);   
+      System.out.println("new:" + StringUtil.replace(title,strSrc,strDist));*/   
     }   
   
   

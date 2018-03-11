@@ -14,6 +14,7 @@ public class RoleResource extends AbstractModel {
 	private Long roleId;
 	private Long resourceId;
 	private Long organizationId;
+	private Long[] roleIdIn;
 
 	public RoleResource() {
 	}
@@ -26,6 +27,14 @@ public class RoleResource extends AbstractModel {
 		this.roleId = roleId;
 		this.resourceId = resourceId;
 		this.organizationId = organizationId;
+	}
+
+	public Long[] getRoleIdIn() {
+		return roleIdIn;
+	}
+
+	public void setRoleIdIn(Long[] roleIdIn) {
+		this.roleIdIn = roleIdIn;
 	}
 
 	public Long getId() {

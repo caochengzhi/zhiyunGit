@@ -14,7 +14,8 @@ public class Resources extends AbstractModel {
 	private String title;
 	private String url;
 	private Long parentId;
-	private Integer level;
+	private String code;//权限标识
+	private Integer type;//'菜单级别:1模块；2菜单；3按钮'
 	private Long organizationId;
 
 	public Resources() {
@@ -26,17 +27,33 @@ public class Resources extends AbstractModel {
 		this.organizationId = organizationId;
 	}
 
-	public Resources(String title, String url, Long parentId, Integer level,
+	public Resources(String title, String url, Long parentId, Integer type,
 			Long organizationId) {
 		this.title = title;
 		this.url = url;
 		this.parentId = parentId;
-		this.level = level;
+		this.type = type;
 		this.organizationId = organizationId;
 	}
 
 	public Long getResourceId() {
 		return this.resourceId;
+	}
+
+	public String getCode() {
+		return code;
+	}
+
+	public void setCode(String code) {
+		this.code = code;
+	}
+
+	public Integer getType() {
+		return type;
+	}
+
+	public void setType(Integer type) {
+		this.type = type;
 	}
 
 	public void setResourceId(Long resourceId) {
@@ -67,13 +84,6 @@ public class Resources extends AbstractModel {
 		this.parentId = parentId;
 	}
 
-	public Integer getLevel() {
-		return this.level;
-	}
-
-	public void setLevel(Integer level) {
-		this.level = level;
-	}
 
 	public Long getOrganizationId() {
 		return this.organizationId;

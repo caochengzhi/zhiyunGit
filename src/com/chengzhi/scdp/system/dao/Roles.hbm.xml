@@ -11,11 +11,19 @@
         <property name="roleName" type="java.lang.String">
             <column name="role_name" length="100" not-null="true"/>
         </property>
+        <property name="roleCode" type="java.lang.String">
+            <column name="role_code" length="100"/>
+        </property>
+        <property name="roleType" type="java.lang.Long">
+            <column name="role_type"/>
+        </property>
         <property name="description" type="java.lang.String">
             <column name="description" length="200"/>
         </property>
         <property name="organizationId" type="java.lang.Long">
             <column name="organization_id" not-null="true"/>
+        </property>
+        <property name="typeName" formula="(select dict_name from sys_dict_datas t where t.role_type = role_type)">
         </property>
     </class>
 </hibernate-mapping>

@@ -1,7 +1,5 @@
 package com.chengzhi.scdp.database.dao.hibernate;
 
-import io.jsonwebtoken.Claims;
-
 import java.io.Serializable;
 import java.sql.Connection;
 import java.sql.SQLException;
@@ -19,23 +17,22 @@ import org.hibernate.criterion.Projections;
 import org.hibernate.jdbc.Work;
 
 import com.chengzhi.scdp.Constants;
-import com.chengzhi.scdp.common.ThreadLocalFactory;
 import com.chengzhi.scdp.database.dao.AbstractModel;
 import com.chengzhi.scdp.database.dao.IBaseDao;
+import com.chengzhi.scdp.system.dao.SysUsers;
 import com.chengzhi.scdp.tools.ObjectUtil;
 
 /**
  * DAO基础实现类
  * 
  * @author beisi
- *
  * @param <T>
  * @param <PK>
  */
 public abstract class BaseHibernateDao<T extends AbstractModel, PK extends Serializable>implements IBaseDao<T, PK> {
 	
 	protected static Logger logger = Logger.getLogger(BaseHibernateDao.class);
-	private Claims claim;
+	private SysUsers currentUser;
 	
 	@Resource(name="sessionFactory")
 	private SessionFactory sessionFactory;
@@ -47,27 +44,27 @@ public abstract class BaseHibernateDao<T extends AbstractModel, PK extends Seria
 		return session;
 	}
 
-	public Claims getClaim(){
-		claim = ThreadLocalFactory.getCurrentUserToken();
-		return claim;
+	public SysUsers getUser(){
+		currentUser = Constants.getCurrentSysUser();
+		return currentUser;
 	}
 	
 	@Override
 	public T save(T model) {
-		setOrganizationId(model);
+		model.setOrganizationId(getUser().getOrganizationId());;
 		getSession().save(model);
 		return model;
 	}
 
 	@Override
 	public void saveOrUpdate(T model) {
-		setOrganizationId(model);
+		model.setOrganizationId(getUser().getOrganizationId());;
 		getSession().saveOrUpdate(model);
 	}
 
 	@Override
 	public void update(T model) {
-		setOrganizationId(model);
+		model.setOrganizationId(getUser().getOrganizationId());;
 		getSession().update(model);
 	}
 	
@@ -101,10 +98,10 @@ public abstract class BaseHibernateDao<T extends AbstractModel, PK extends Seria
 	public List<T> findByProperty(Class<T> entityClass, String propertyName, Object value) {
 		logger.debug("finding SysUsers instance with property: " + propertyName + ", value: " + value);
 		try {
-			String queryString = "from "+entityClass.getName()+" as model where model." + propertyName + "= ? and model.organizationId = ?";
+			String queryString = "from "+entityClass.getName()+" as model where model." + propertyName + "= :propertyName and model.organizationId = :organizationId";
 			Query queryObject = getSession().createQuery(queryString);
-			queryObject.setParameter(0, value);
-			queryObject.setParameter(1, (Long)claim.get(Constants.ORGANIZATIONID));
+			queryObject.setParameter("propertyName", value);
+			queryObject.setParameter("organizationId", getUser().getOrganizationId());
 			return queryObject.list();
 		} catch (RuntimeException re) {
 			logger.error("find by property name failed", re);
@@ -121,7 +118,7 @@ public abstract class BaseHibernateDao<T extends AbstractModel, PK extends Seria
 	@Override
 	public int count(T cond) {
 		if(cond.getOrganizationId() == null)
-			setOrganizationId(cond);
+			cond.setOrganizationId(getUser().getOrganizationId());
 		Criteria criteria = getSession().createCriteria(cond.getClass());
 		ObjectUtil.contructCond(criteria, cond);
 		criteria.setProjection(Projections.rowCount());
@@ -132,7 +129,8 @@ public abstract class BaseHibernateDao<T extends AbstractModel, PK extends Seria
 	@Override
 	public List<T> findByCond(T cond) {
 		if(cond.getOrganizationId() == null)
-			setOrganizationId(cond);
+			cond.setOrganizationId(getUser().getOrganizationId());
+		
 		Criteria criteria = getSession().createCriteria(cond.getClass());
 		ObjectUtil.contructCond(criteria, cond);
 		return criteria.list();
@@ -145,7 +143,7 @@ public abstract class BaseHibernateDao<T extends AbstractModel, PK extends Seria
 	@Override
 	public List<T> findByCond(T cond, String sortName,String sortOrder, int pageNum, int pageSize) {
 		if(cond.getOrganizationId() == null)
-			setOrganizationId(cond);
+			cond.setOrganizationId(getUser().getOrganizationId());
 		
 		Criteria criteria = getSession().createCriteria(cond.getClass());
 		ObjectUtil.contructCond(criteria, cond);
@@ -170,13 +168,8 @@ public abstract class BaseHibernateDao<T extends AbstractModel, PK extends Seria
 	 */
 	@Override
 	public void merge(T model) {
-		setOrganizationId(model);
+		model.setOrganizationId(getUser().getOrganizationId());
 		getSession().merge(model);
-	}
-	
-	private void setOrganizationId(T model) {
-		claim = getClaim();
-		model.setOrganizationId(Long.parseLong(claim.get(Constants.ORGANIZATIONID).toString()));
 	}
 
 }

@@ -64,8 +64,8 @@ public class MyFormAuthenticationFilter extends FormAuthenticationFilter{
                 SysUsers user = (SysUsers) subject.getPrincipal();
                 
                 //如果两次登陆的用户一样，则先退出之前登陆的用户
-                if (account != null && user != null && account.equals(user.getLoginName())){
-                    //注销登录
+                if (account != null && user != null && !account.equals(user.getLoginName())){
+                    //注销之前登录用户
                     subject.logout();
                 }
 			}
