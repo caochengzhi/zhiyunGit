@@ -15,11 +15,8 @@
            
 	<div id="toolbar">  
 	    <div class="btn-group">  
-	        <button  class="add btn btn-primary">  
+	        <button  class="add btn btn-primary" onclick='onPermission()'>
 	            <i class="glyphicon glyphicon-plus"></i>添加角色
-	        </button>  
-	        <button class="modify btn btn-primary">  
-	            <i class="glyphicon glyphicon-cog"></i>编辑角色
 	        </button>  
 	    </div>  
 	</div>
@@ -27,41 +24,6 @@
 	<div class="container">
 		<table id="mytable"></table>
 	</div>
-	
-	<!-- 弹出框 -->
-	<div class="modal fade" id="themodal">
-		<div class="modal-dialog">
-			<div class="modal-content">
-				<div class="modal-header">
-					<h4 class="modal-title" id="title"></h4>
-				</div>
-				<div class="modal-body" id="mydiv">
-					<form id="myform" action="roleManager/saveRole" method="post" class="form-horizontal" >
-                        <div class="form-group">
-                            <label class="col-xs-2 col_style_label">角色名称：</label>
-                            <div class="col-sm-6">
-                                <input type="text" class="form-control" name="roleName" id="roleName" placeholder="请输入角色名称..." />
-                            </div>
-                        </div>
-
-                        <div class="form-group">
-                            <label class="col-xs-2 col_style_label">角色描述：</label>
-                            <div class="col-sm-6">
-                                <input type="text" class="form-control" name="describe" id="describe" placeholder="请输入角色相关描述..." />
-                            </div>
-                        </div>
-                        <input type="hidden" id="roleId" name="roleId">
-                        <div class="modal-footer">
-                        	<button type="button" class="btn btn-default" data-dismiss="modal">关闭</button>  
-							<button id="savebtn" type="submit" class="btn btn-default" >保 存</button>
-						</div>
-                    </form>
-				</div>
-			</div>
-			
-		</div>
-	</div>
-	
 	
 	<script type="text/javascript">
 	    var $table = $('#mytable');
@@ -87,83 +49,79 @@
             columns: [{
                 checkbox: true
             },{
+                field: 'Number',  
+                align:'center',
+                formatter: function (value, row, index) {  
+                	return index+1;  
+                }
+            },{
                 field: 'roleId',
                 title: 'ID',
                 visible:false
             }, {
                 field: 'roleName',
-                title: '角色名称',
+                title: '角色名称'
+            }, {
+                field: 'roleCode',
+                title: '角色编码',
+            }, {
+                field: 'roleType',
+                title: '角色类型',
             }, {
                 field: 'description',
-                title: '角色描述'
+                title: '备注信息'
+            }, {
+                field: 'operator',
+                title: '操作',
+                formatter: actionFormatter
             }]
 	    });
+	    
+	    //value: 所在collumn的当前显示值，
+	    //row:整个行的数据 ，对象化，可通过.获取
+	     //表格-操作 - 格式化 
+	    function actionFormatter(value, row, index) {
+	        return ['<a class="btn" href="javascript:onPermission('+"'search'"+')" title="查看角色"><i class="glyphicon glyphicon-search"></i></a>' 
+	        ,'<a class="modify btn" href="javascript:onPermission('+"'modify'"+')" title="编辑角色"><i class="glyphicon glyphicon-pencil"></i></a>'
+	        ,'<div class="btn-group">'
+	        ,'	<a title="数据操作" class="btn dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">'
+	        ,'  	<i class="glyphicon glyphicon-circle-arrow-right"></i>'
+	        ,'	</a>'
+	        ,'	<ul class="dropdown-menu">'
+	        ,'  	<li><a href="javascript:onPermission3('+index+')">分配用户</a></li>'
+	        ,'  	<li><a href="javascript:onPermission2('+index+')">权限菜单</a></li>'
+	        ,'	</ul>'
+	        ,'</div>'].join('');
+	    }
+	    
 	</script>
 	
-	<!-- 表单验证 -->
 	<script type="text/javascript">
+		function onPermission(type){
+			var frm = document.subfrm;
+			if(typeof(type) == "undefined"){
+				frm.action = "roleManager/toModify/"+type+"?roleId=";
+				frm.submit(); 
+			}else{
+				var selectContent = getTableRow('mytable');
+				if(selectContent != null){
+					var roleId = selectContent.roleId;
+					frm.action = "roleManager/toModify/"+type+"?roleId="+roleId;
+					frm.submit(); 
+				}
+			}
+		}
 		
-		//新增角色
-		$(".add").click(function() {
-            $("#mydiv input").each(function() {
-	            $(this).val('');
-	        });
-            $('#title').text('添加角色');
-            $('#savebtn').text('保存');
-			$("#themodal").modal("show");
-		});
-		
-		//编辑角色
-		$(".modify").click(function(){
-			var selectContent = $('#mytable').bootstrapTable('getSelections')[0];  
-	        if(typeof(selectContent) == 'undefined') {  
-	            toastr.warning('请选择一列数据!');  
-	        }else{  
-	            $('#roleName').val(selectContent.roleName);
-	            $('#describe').val(selectContent.description);
-	            $('#roleId').val(selectContent.roleId);
-	            $('#title').text('编辑角色');
-	            $('#savebtn').text('更新');
-	            $('#themodal').modal('show');     // 项目立项面板  
-	        } 
-		});	
-		
-		$(document).ready(function() {
-		    $('#myform').bootstrapValidator({
-		        container: 'tooltip',
-		        feedbackIcons: {
-		            valid: 'glyphicon glyphicon-ok',
-		            invalid: 'glyphicon glyphicon-remove',
-		            validating: 'glyphicon glyphicon-refresh'
-		        },
-		        fields: {
-		            roleName: {
-		                validators: {
-		                    stringLength: {
-		                        min: 2,
-		                        message: '角色名不允许少于2个字符!'
-		                    },
-		                    notEmpty: {
-		                        message: '角色名不允许为空!'
-		                    }
-		                }
-		            },
-		            describe: {
-		                validators: {
-		                    stringLength: {
-		                        min: 2,
-		                        message: '角色描述不允许少于2个字符!'
-		                    },
-		                    notEmpty: {
-		                        message: '角色描述不允许为空!'
-		                    }
-		                }
-		            }
-		        }
-		    });
-		});
+		 function onPermission2(index){
+		    	checkTable('mytable',index);
+		    	onPermission('update');
+		 }
+		 
+		 function onPermission3(index){
+		    	checkTable('mytable',index);
+		    	onPermission('update');
+		 }
 		
 	</script>
-	
 </body>
 </html>
