@@ -13,19 +13,19 @@
          <li class="breadcrumb-item">系统管理</li>
          <li class="breadcrumb-item active">用户管理</li>
     </ol>
-           
+
 	<div class="container">
 		<form role="form">
 	         <div class="row-fluid">
 		         <div class="form-group">
 		         <label class="col-md-1 col_style_label" >登录名</label>
 		            <div class="col-md-4 ">
-		            	<input class="form-control" id="loginName" name="loginName" type="text" placeholder="请输入登录名..."/>
+		            	<input class="form-control" id="_loginName" name="_loginName" type="text" placeholder="请输入登录名..."/>
 		            </div>
 		            <label class="col-md-1"></label>
 		            <label class="col-md-1 col_style_label">电话号码</label>
 		            <div class="col-md-4 ">
-		            	<input class="form-control" id="phoneNumber" name="phoneNumber" type="text" placeholder="请输入电话号码..."/>
+		            	<input class="form-control" id="_phoneNumber" name="_phoneNumber" type="text" placeholder="请输入电话号码..."/>
 		            </div>
 		         </div>
 	         </div>   
@@ -33,7 +33,7 @@
         
         <div align="right" style="padding-top: 50px;">   
 		   <div class="btn-group">  
-		       <button class="btn btn-primary">  
+		       <button class="search btn btn-primary">  
 			     <i class="glyphicon glyphicon-search"></i>查询用户
 			   </button>
 			   <button class="add btn btn-primary">  
@@ -132,20 +132,20 @@
 	<script type="text/javascript">
 	    var $table = $('#mytable');
 	    $table.bootstrapTable({
-	    	url: 'userManager/search',        
-            method: 'post',                     
+            method: 'post',
+            contentType: "application/x-www-form-urlencoded",//post方式提交必须要有此参数
             striped: true,                      //是否显示行间隔色
             cache: false,                       //是否使用缓存，默认为true，所以一般情况下需要设置一下这个属性
             sortable: true,                     //是否启用排序
             pagination: true, 					//是否启用分页
-            //sidePagination: "server",         //分页方式：client客户端分页，server服务端分页（*）
+            sidePagination: "server",           //分页方式：client客户端分页，server服务端分页（*）
+            queryParams:queryParams,			//请求服务器时所传的参数
             pageNumber: 1,                      //初始化加载第一页，默认第一页
-            pageSize: 10,                       //每页的记录行数（*）
-            pageList: [10, 25, 50, 100],        //可供选择的每页的行数（*）
+            pageSize: 25,                       //每页的记录行数（*）
+            pageList: [25, 50, 100],            //可供选择的每页的行数（*）
             sortOrder: "asc",                   //排序方式
-            search: true,                       //是否显示表格搜索，此搜索是客户端搜索，不会进服务端
             showColumns: true,                  //是否显示所有的列
-            minimumCountColumns: 2,            //最少允许的列数
+            minimumCountColumns: 2,             //最少允许的列数
             singleSelect: true,					//是否单行选择
             clickToSelect: true,                //是否启用点击选中行
             height: 430,                        //行高，如果没有设置height属性，表格自动根据记录条数觉得表格高度
@@ -177,10 +177,32 @@
                 title: '是否有效'
             },{
             	field:'createDate',
-            	title:'创建日期'
+            	title:'创建日期',
+            	sortable : true
+            },{
+            	field:'lastUpdateDate',
+            	title:'更新日期',
+            	sortable : true
             }]
 	    });
 	   
+	  //请求服务数据时所传参数
+	    function queryParams(params){
+	        return{
+	        	pageNumber: params.offset,
+                pageSize: params.limit,
+                sortName: params.sort,
+                sortOrder: params.order,
+                loginName:$('#_loginName').val(),
+                phoneNumber:$('#_phoneNumber').val()
+	        }
+	    }
+	  
+	  $(".search").click(function(){
+		  $table.bootstrapTable('refreshOptions',{pageNumber:1});
+		  $table.bootstrapTable('refresh', {url: 'userManager/search'});
+	  })
+	  
 	</script>
 	
 	<script type="text/javascript">
@@ -305,7 +327,7 @@
 						  var isVaild = selectContent.isValid;
 						  if(isVaild=='N'){
 							  toastr.warning("已经是失效用户");
-							  return false;
+							  return;
 						  }
 						  
 						  $.ajax({
@@ -332,11 +354,12 @@
 		            toastr.warning('请选择一列数据!');  
 		            return false;
 		        } 
-		        	
+		        
 		        $('#sex').val(selectContent.sex);
 		        $('#loginName').val(selectContent.loginName);
 		        $('#userId').val(selectContent.userId);
 		        $('#loginPassword').val(selectContent.loginPassword);
+		        $('#confirmPassword').val(selectContent.loginPassword)
 		        $('#email').val(selectContent.email);
 		        $('#phoneNumber').val(selectContent.phoneNumber);
 		        $('#userName').val(selectContent.userName);

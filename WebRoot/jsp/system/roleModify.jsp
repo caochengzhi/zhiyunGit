@@ -4,9 +4,6 @@
 <html>
 <head>
 	<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
-	<link rel="stylesheet" href="js/zTree/css/metroStyle/metroStyle.css" type="text/css">
-	<script type="text/javascript" src="js/zTree/js/jquery.ztree.core.min.js"></script>
-	<script type="text/javascript" src="js/zTree/js/jquery.ztree.excheck.min.js"></script>
 <title>角色编辑</title>
 </head>
 <body>
@@ -97,6 +94,12 @@
 	                <div class="pre-scrollable">
 						<ul id="tree" class="ztree"></ul>
 					</div>
+					<c:if test="${type == 'update' }">
+						<div class="modal-footer">
+							<button id="savebtn" type="submit" class="btn btn-default" >保 存</button>
+							<button type="button" class="btn btn-default" onclick="javascript:history.back(-1);">返 回</button>  
+						</div>
+					</c:if>
 					
 					<script type="text/javascript">
 							var setting = {
@@ -113,8 +116,8 @@
 								},
 								async: {
 									enable: true,
-									url:"roleManager/getRoleAclTree/${type}",
-									otherParam:{"roleId":"${role.roleId}"},
+									url:"roleManager/getRoleAclTree",
+									otherParam:{"roleId":"${roleId}"},
 										type: "post",
 										dataType:"text"
 									}
@@ -138,21 +141,6 @@
     </div>
 </body>
 <script type="text/javascript">
-	
- function onSubmit(){
-	 //alert($('#resourceCodes').val());
-	/* var zTree = $.fn.zTree.getZTreeObj("tree");
-	if(zTree != null){
-		var nodes = zTree.getCheckedNodes(true);
-		var resources = "";
-		for(var i=0;i<nodes.length;i++){  
-			resources +=nodes[i].code+ ",";
-		}
-		var frm = document.myform;
-		frm.resourceCodes = resources;
-		frm.submit();
-	} */
-} 
 	
 	$(document).ready(function() {
 		
