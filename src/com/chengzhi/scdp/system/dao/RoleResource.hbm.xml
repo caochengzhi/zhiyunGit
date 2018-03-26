@@ -14,6 +14,9 @@
         <property name="resourceId" type="java.lang.Long">
             <column name="resource_id"/>
         </property>
+        <property name="resourceCode" type="java.lang.String">
+        	<column name="resource_code" not-null="true" length="100"/>
+        </property>
         <property name="organizationId" type="java.lang.Long">
             <column name="organization_id" not-null="true"/>
         </property>

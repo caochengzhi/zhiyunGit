@@ -1,0 +1,43 @@
+<?xml version="1.0"?>
+<!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN"
+"http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd">
+<!-- Generated 2018-3-11 18:39:46 by Hibernate Tools 3.2.2.GA -->
+<hibernate-mapping>
+    <class name="com.chengzhi.scdp.system.dao.SysDictType" table="sys_dict_type" catalog="sdsdb">
+        <id name="dictId" type="java.lang.Long">
+            <column name="dict_id" />
+            <generator class="identity" />
+        </id>
+        <property name="dictName" type="string">
+            <column name="dict_name" length="100" not-null="true"/>
+        </property>
+        <property name="dictType" type="string">
+            <column name="dict_type" length="100" not-null="true" unique="true"/>
+        </property>
+        <property name="status" type="char">
+            <column name="status" length="1" not-null="true"/>
+        </property>
+        <property name="createBy" type="string">
+            <column name="create_by" length="64" not-null="true"/>
+        </property>
+        <property name="createDate" type="timestamp">
+            <column name="create_date" length="19" not-null="true"/>
+        </property>
+        <property name="updateBy" type="string">
+            <column name="update_by" length="64" not-null="true"/>
+        </property>
+        <property name="updateDate" type="string">
+            <column name="update_date" length="20"/>
+        </property>
+        <property name="remarks" type="string">
+            <column name="remarks" length="500"/>
+        </property>
+        <set name="sysDictDatases" inverse="true">
+            <key>
+                <column name="dict_type" not-null="true">
+                </column>
+            </key>
+            <one-to-many class="com.chengzhi.scdp.system.dao.SysDictDatas" />
+        </set>
+    </class>
+</hibernate-mapping>

@@ -222,6 +222,7 @@ public class ModuleManager {
 		return map;
 	}
 	
+	
 	public JSONArray getAllResource(){
 
 		JSONArray array = new JSONArray();
@@ -273,39 +274,104 @@ public class ModuleManager {
 	
 	}
 	
+	private static void setChecked(JSONObject obj,List<String> resource,StringBuilder sBuilder){
+		obj.put("code", sBuilder.toString());
+		if(resource != null && resource.size() > 0){
+			if(resource.contains(sBuilder.toString()))
+				obj.put("checked", true);
+		}
+		sBuilder.setLength(0);
+	}
+	
 	/**
-	 * 获取菜单树
+	 * 查询角色对应的权限列表
+	 * @param resource
 	 * @return
 	 */
-	public String getActTree(){
+	public String getRoleViews(List<String> resource){
+
 		JSONArray array = new JSONArray();
 		Map<String,String> map = getModuleIds();
+		StringBuilder sBuilder = new StringBuilder();
 		for(Iterator<String> it = map.keySet().iterator();it.hasNext();){
 			String subId = it.next();
 			String parentId = getParentId(subId);
 			if(parentId == null) continue;
-			String subName = map.get(subId);
-			String parentName = map.get(parentId);
 			
-			JSONObject obj = new JSONObject();
-			obj.put("id", subId);
-			obj.put("pId", parentId);
-			obj.put("title", subName);
-			obj.put("open", true);
+			sBuilder.append(parentId).append(":").append(subId);
+			if(resource.contains(sBuilder.toString())){
+				String subName = map.get(subId);
+				JSONObject obj = new JSONObject();
+				obj.put("id", subId);
+				obj.put("pId", parentId);
+				obj.put("name", subName);
+				obj.put("open", true);
+				array.add(obj);
+			}
+			sBuilder.setLength(0);
 			
-			array.add(obj);
-			
-//			System.out.println(parentId+"("+parentName+")  "+subId+"("+subName+")");
 			HashMap<String,Node> e = moduleAction.get(subId);
 			for(Iterator<String> subIt = e.keySet().iterator();subIt.hasNext();){
 				String subKey = subIt.next();
 				String title = getActionTitle(subId, subKey);
-				//System.out.println(subId+"==="+subKey+"==="+getActionTitle(subId, subKey));
+				
+				if(resource != null && resource.size() > 0){
+					sBuilder.append(parentId).append(":").append(subId).append(":").append(subKey);
+					if(resource.contains(sBuilder.toString())){
+						JSONObject subObj = new JSONObject();
+						subObj.put("id", subKey);
+						subObj.put("pId", subId);
+						subObj.put("name", title);
+						
+						array.add(subObj);
+					}
+						
+				}
+				sBuilder.setLength(0);
+			}
+			
+		}
+		return array.toString();
+	
+	}
+	
+	/**
+	 * 获取对应角色的权限菜单树,供编辑角色权限列表使用
+	 * @return
+	 */
+	public String getRolesAclTree(List<String> resource){
+		JSONArray array = new JSONArray();
+		Map<String,String> map = getModuleIds();
+		StringBuilder sBuilder = new StringBuilder();
+		for(Iterator<String> it = map.keySet().iterator();it.hasNext();){
+			String subId = it.next();
+			String parentId = getParentId(subId);
+			if(parentId == null) continue;
+			
+			String subName = map.get(subId);
+			
+			JSONObject obj = new JSONObject();
+			obj.put("id", subId);
+			obj.put("pId", parentId);
+			obj.put("name", subName);
+			
+			sBuilder.append(parentId).append(":").append(subId);
+			setChecked(obj, resource, sBuilder);
+			
+			array.add(obj);
+			
+			HashMap<String,Node> e = moduleAction.get(subId);
+			for(Iterator<String> subIt = e.keySet().iterator();subIt.hasNext();){
+				String subKey = subIt.next();
+				String title = getActionTitle(subId, subKey);
+				
 				JSONObject subObj = new JSONObject();
 				subObj.put("id", subKey);
 				subObj.put("pId", subId);
-				subObj.put("title", title);
-				subObj.put("open", true);
+				subObj.put("name", title);
+				
+				sBuilder.append(parentId).append(":").append(subId).append(":").append(subKey);
+				setChecked(subObj, resource, sBuilder);
 				
 				array.add(subObj);
 			}

@@ -15,11 +15,13 @@ public class Roles extends AbstractModel {
 	private Long roleId;
 	private Long[] roleIdIn;
 	private String roleName;
-	private Long roleCode;
-	private String roleType;
+	private String roleCode;//角色编码
+	private Long roleType;//角色类型，比如公司员工，外部客户
 	private String typeName;
 	private String description;
 	private Long organizationId;
+	
+	private String resourceCodes;
 	
 	private List<Resources> permissions ;
     private List<SysUsers> users ;
@@ -60,19 +62,19 @@ public class Roles extends AbstractModel {
 		return permissions;
 	}
 
-	public Long getRoleCode() {
+	public String getRoleCode() {
 		return roleCode;
 	}
 
-	public void setRoleCode(Long roleCode) {
+	public void setRoleCode(String roleCode) {
 		this.roleCode = roleCode;
 	}
 
-	public String getRoleType() {
+	public Long getRoleType() {
 		return roleType;
 	}
 
-	public void setRoleType(String roleType) {
+	public void setRoleType(Long roleType) {
 		this.roleType = roleType;
 	}
 
@@ -118,6 +120,14 @@ public class Roles extends AbstractModel {
 
 	public void setOrganizationId(Long organizationId) {
 		this.organizationId = organizationId;
+	}
+
+	public String getResourceCodes() {
+		return resourceCodes;
+	}
+
+	public void setResourceCodes(String resourceCodes) {
+		this.resourceCodes = resourceCodes;
 	}
 
 }
