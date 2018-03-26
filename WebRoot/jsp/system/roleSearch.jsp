@@ -131,22 +131,23 @@
 			}
 		}
 		
+		//设置角色对应权限
 		 function setPermission(index){
 		    	checkTable('mytable',index);
 		    	onPermission('update');
 		 }
 		 
+		 //设置角色关联用户
 		 function setUsers(index){
 		    	checkTable('mytable',index);
 		    	alert('设置用户');
 		 }
 		
+		 //查看权限
 		 function showPermission(){
 			 $("#themodal").modal("show");
+				var roleId = getTableRow('mytable').roleId;
 			 	var setting = {
-						check: {
-							enable: true
-						},
 						data: {
 							simpleData: {
 								enable: true
@@ -154,8 +155,8 @@
 						},
 						async: {
 							enable: true,
-							url:"roleManager/getRoleAclTree",
-							otherParam:{"roleId":"${roleId}"},
+							url:"roleManager/getRoleViews",
+							otherParam:{"roleId":roleId},
 								type: "post",
 								dataType:"text"
 							}

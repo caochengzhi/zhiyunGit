@@ -74,7 +74,7 @@
 							           <button type="button" class="btn btn-default" onclick="javascript:history.back(-1);">返 回</button>  
 								  </div>
 								  <input type="hidden" id="roleId" name="roleId" value="${role.roleId }">
-								  <input type="hidden" id="resourceCodes" name="resourceCodes" >
+								  <input type="hidden" id="resourceCodes" name="resourceCodes" value="${role.resourceCodes }">
 								  <input type="hidden" id="operatorType" name="operatorType" value="${type}">
 							  </form>
 						</div>
@@ -96,8 +96,13 @@
 					</div>
 					<c:if test="${type == 'update' }">
 						<div class="modal-footer">
-							<button id="savebtn" type="submit" class="btn btn-default" >保 存</button>
-							<button type="button" class="btn btn-default" onclick="javascript:history.back(-1);">返 回</button>  
+							<form id="myform" name="myform" action="roleManager/saveRole" method="post" class="form-horizontal" >
+								<button id="savebtn" type="submit" class="btn btn-default" >保 存</button>
+								<button type="button" class="btn btn-default" onclick="javascript:history.back(-1);">返 回</button>  
+								<input type="hidden" id="roleId" name="roleId" value="${role.roleId }">
+								<input type="hidden" id="resourceCodes" name="resourceCodes" value="${role.resourceCodes }">
+								<input type="hidden" id="operatorType" name="operatorType" value="${type}">
+							</form>
 						</div>
 					</c:if>
 					
