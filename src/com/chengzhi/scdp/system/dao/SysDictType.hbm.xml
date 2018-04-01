@@ -32,12 +32,8 @@
         <property name="remarks" type="string">
             <column name="remarks" length="500"/>
         </property>
-        <set name="sysDictDatases" inverse="true">
-            <key>
-                <column name="dict_type" not-null="true">
-                </column>
-            </key>
-            <one-to-many class="com.chengzhi.scdp.system.dao.SysDictDatas" />
-        </set>
+        <property name="organizationId" type="java.lang.Long">
+            <column name="organization_id" not-null="true"/>
+        </property>
     </class>
 </hibernate-mapping>

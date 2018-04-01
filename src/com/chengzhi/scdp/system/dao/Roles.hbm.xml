@@ -23,7 +23,7 @@
         <property name="organizationId" type="java.lang.Long">
             <column name="organization_id" not-null="true"/>
         </property>
-        <property name="typeName" formula="(select t.dict_name from sys_dict_datas t where t.id = role_type)">
+        <property name="typeName" formula="(select t.dict_name from sys_dict_datas t where t.id = role_type and t.organization_id = organization_id)">
         </property>
     </class>
 </hibernate-mapping>

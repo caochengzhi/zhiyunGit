@@ -15,4 +15,6 @@ public class SystemRegistrationController extends BaseController{
 		return "system/systemRegistSearch";
 	}
 	
+	
+	
 }

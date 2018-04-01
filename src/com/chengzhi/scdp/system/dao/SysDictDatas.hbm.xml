@@ -8,14 +8,14 @@
             <column name="id" />
             <generator class="identity" />
         </id>
-        <many-to-one name="sysDictType" class="com.chengzhi.scdp.system.dao.SysDictType" fetch="select">
-            <column name="dict_type" not-null="true"/>
-        </many-to-one>
         <property name="dictName" type="string">
             <column name="dict_name" length="100" not-null="true"/>
         </property>
         <property name="status" type="char">
             <column name="status" length="1" not-null="true"/>
+        </property>
+        <property name="dictId" type="java.lang.Long">
+            <column name="dict_id"/>
         </property>
         <property name="createBy" type="string">
             <column name="create_by" length="64" not-null="true"/>
@@ -31,6 +31,11 @@
         </property>
         <property name="remarks" type="string">
             <column name="remarks" length="500"/>
+        </property>
+        <property name="organizationId" type="java.lang.Long">
+            <column name="organization_id" not-null="true"/>
+        </property>
+        <property name="dictType" formula="(select t.dict_type from sys_dict_type t where t.dict_id = dict_id and t.organization_id = organization_id)">
         </property>
     </class>
 </hibernate-mapping>

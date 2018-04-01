@@ -5,13 +5,14 @@ import java.util.Date;
 import com.chengzhi.scdp.database.dao.AbstractModel;
 
 /**
- * 数据字典配置表
+ * 数据字典明细数据类型配置表
  */
 public class SysDictDatas extends AbstractModel{
 
 	private static final long serialVersionUID = -8515342632274874574L;
 	private Long id;
-	private SysDictType sysDictType;
+	private Long dictId;
+	private String dictType;
 	private String dictName;
 	private char status;
 	private String createBy;
@@ -19,13 +20,13 @@ public class SysDictDatas extends AbstractModel{
 	private String updateBy;
 	private String updateDate;
 	private String remarks;
+	private Long organizationId;
 
 	public SysDictDatas() {
 	}
 
-	public SysDictDatas(SysDictType sysDictType, String dictName, char status,
+	public SysDictDatas(String dictName, char status,
 			String createBy, Date createDate, String updateBy) {
-		this.sysDictType = sysDictType;
 		this.dictName = dictName;
 		this.status = status;
 		this.createBy = createBy;
@@ -33,10 +34,9 @@ public class SysDictDatas extends AbstractModel{
 		this.updateBy = updateBy;
 	}
 
-	public SysDictDatas(SysDictType sysDictType, String dictName, char status,
+	public SysDictDatas(String dictName, char status,
 			String createBy, Date createDate, String updateBy,
 			String updateDate, String remarks) {
-		this.sysDictType = sysDictType;
 		this.dictName = dictName;
 		this.status = status;
 		this.createBy = createBy;
@@ -44,6 +44,22 @@ public class SysDictDatas extends AbstractModel{
 		this.updateBy = updateBy;
 		this.updateDate = updateDate;
 		this.remarks = remarks;
+	}
+
+	public Long getDictId() {
+		return dictId;
+	}
+
+	public void setDictId(Long dictId) {
+		this.dictId = dictId;
+	}
+
+	public Long getOrganizationId() {
+		return organizationId;
+	}
+
+	public void setOrganizationId(Long organizationId) {
+		this.organizationId = organizationId;
 	}
 
 	public Long getId() {
@@ -54,12 +70,12 @@ public class SysDictDatas extends AbstractModel{
 		this.id = id;
 	}
 
-	public SysDictType getSysDictType() {
-		return this.sysDictType;
+	public String getDictType() {
+		return dictType;
 	}
 
-	public void setSysDictType(SysDictType sysDictType) {
-		this.sysDictType = sysDictType;
+	public void setDictType(String dictType) {
+		this.dictType = dictType;
 	}
 
 	public String getDictName() {

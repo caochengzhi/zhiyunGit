@@ -2,6 +2,8 @@ package com.chengzhi.scdp.system.controller;
 
 import java.util.List;
 
+import javax.servlet.http.HttpServletRequest;
+
 import net.sf.json.JSONObject;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -36,6 +38,15 @@ public class SysUserController extends BaseController{
 		return "system/userSearch";
 	}
 	
+	/**
+	 * 用户查询
+	 * @param user
+	 * @param pageNumber
+	 * @param pageSize
+	 * @param sortName
+	 * @param sortOrder
+	 * @return
+	 */
 	@RequestMapping(value = "/search",method = RequestMethod.POST)
 	public @ResponseBody String searchUsers(SysUsers user,int pageNumber,int pageSize,String sortName, String sortOrder){
 		JSONObject result = new JSONObject();
@@ -45,6 +56,21 @@ public class SysUserController extends BaseController{
 		result.put("total", count);
 		result.put("rows", JsonUtil.formatListWithDate(list));
 		return result.toString();
+	}
+	
+	/**
+	 * 用户新增或修改 
+	 * @param request
+	 * @param userId
+	 * @return
+	 */
+	@RequestMapping(value = "/toModify", method = {RequestMethod.POST})
+	public String toModify(HttpServletRequest request,@RequestParam Long userId){
+		if(userId != null){
+			SysUsers user = sysUserService.findUserById(userId);
+			request.setAttribute("user", user);
+		}
+		return "system/userModify";
 	}
 	
 	@RequestMapping(value="/cancalUser",method={RequestMethod.POST},produces={"text/html;charset=UTF-8;","application/json;"})

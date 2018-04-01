@@ -2,14 +2,14 @@ package com.chengzhi.scdp.system.dao;
 // default package
 // Generated 2018-3-11 18:39:46 by Hibernate Tools 3.2.2.GA
 
+import java.util.ArrayList;
 import java.util.Date;
-import java.util.HashSet;
-import java.util.Set;
+import java.util.List;
 
 import com.chengzhi.scdp.database.dao.AbstractModel;
 
 /**
- * 数据字典类型表
+ * 数据字典主类型配置表
  */
 public class SysDictType extends AbstractModel {
 
@@ -23,7 +23,8 @@ public class SysDictType extends AbstractModel {
 	private String updateBy;
 	private String updateDate;
 	private String remarks;
-	private Set<SysDictDatas> sysDictDatases = new HashSet<SysDictDatas>(0);
+	private Long organizationId;
+	private List<SysDictDatas> sysDictDatases = new ArrayList<SysDictDatas>(0);
 
 	public SysDictType() {
 	}
@@ -40,7 +41,7 @@ public class SysDictType extends AbstractModel {
 
 	public SysDictType(String dictName, String dictType, char status,
 			String createBy, Date createDate, String updateBy,
-			String updateDate, String remarks, Set<SysDictDatas> sysDictDatases) {
+			String updateDate, String remarks, List<SysDictDatas> sysDictDatases) {
 		this.dictName = dictName;
 		this.dictType = dictType;
 		this.status = status;
@@ -66,6 +67,14 @@ public class SysDictType extends AbstractModel {
 
 	public void setDictName(String dictName) {
 		this.dictName = dictName;
+	}
+
+	public Long getOrganizationId() {
+		return organizationId;
+	}
+
+	public void setOrganizationId(Long organizationId) {
+		this.organizationId = organizationId;
 	}
 
 	public String getDictType() {
@@ -124,11 +133,11 @@ public class SysDictType extends AbstractModel {
 		this.remarks = remarks;
 	}
 
-	public Set<SysDictDatas> getSysDictDatases() {
+	public List<SysDictDatas> getSysDictDatases() {
 		return this.sysDictDatases;
 	}
 
-	public void setSysDictDatases(Set<SysDictDatas> sysDictDatases) {
+	public void setSysDictDatases(List<SysDictDatas> sysDictDatases) {
 		this.sysDictDatases = sysDictDatases;
 	}
 
