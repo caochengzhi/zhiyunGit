@@ -58,8 +58,6 @@
 							           <label class="col-xs-2 col_style_label">角色类型：</label>
 							           <div class="col-sm-6">
 								           <select class="form-control" id="roleTypeselect" name="roleType">
-												<option value="1">Alabama</option>
-												<option value="2">Wyoming</option>
 										   </select>
 							       	   </div>
 							      </div>
@@ -70,8 +68,8 @@
 							           </div>
 							      </div>
 							      <div class="modal-footer">
-									   <button id="savebtn" type="submit" class="btn btn-default" >保 存</button>
-							           <button type="button" class="btn btn-default" onclick="javascript:history.back(-1);">返 回</button>  
+									   <button id="savebtn" type="submit" class="btn btn-success" ><i class="glyphicon glyphicon-ok"></i>保 存</button>
+							           <button type="button" class="btn btn-default" onclick="javascript:history.back(-1);"><i class="fa fa-reply-all"></i>返 回</button>  
 								  </div>
 								  <input type="hidden" id="roleId" name="roleId" value="${role.roleId }">
 								  <input type="hidden" id="resourceCodes" name="resourceCodes" value="${role.resourceCodes }">
@@ -97,8 +95,8 @@
 					<c:if test="${type == 'update' }">
 						<div class="modal-footer">
 							<form id="myform" name="myform" action="roleManager/saveRole" method="post" class="form-horizontal" >
-								<button id="savebtn" type="submit" class="btn btn-default" >保 存</button>
-								<button type="button" class="btn btn-default" onclick="javascript:history.back(-1);">返 回</button>  
+								<button id="savebtn" type="submit" class="btn btn-success" ><i class="glyphicon glyphicon-ok"></i>保 存</button>
+								<button type="button" class="btn btn-default" onclick="javascript:history.back(-1);"><i class="fa fa-reply-all"></i>返 回</button>  
 								<input type="hidden" id="roleId" name="roleId" value="${role.roleId }">
 								<input type="hidden" id="resourceCodes" name="resourceCodes" value="${role.resourceCodes }">
 								<input type="hidden" id="operatorType" name="operatorType" value="${type}">
@@ -146,10 +144,17 @@
     </div>
 </body>
 <script type="text/javascript">
-	
+
 	$(document).ready(function() {
 		
-		$('#roleTypeselect').select2();
+		 $('#roleTypeselect').select2({
+			 data: getAjaxJson('dictType=roleType','dictManager/getDictSelect'),
+		     placeholder:'请选择...',//默认文字提示
+		     language: "zh-CN",//汉化
+		     //multiple:true,//是否多选
+		     allowClear: true//允许清空
+		}); 
+		$("#roleTypeselect").select2('val','1');
 		
 	    $('#myform').bootstrapValidator({
 	        container: 'tooltip',

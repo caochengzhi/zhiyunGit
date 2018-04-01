@@ -15,21 +15,19 @@
     </ol>
 
 	<div class="container">
-		<form role="form">
-	         <div class="row-fluid">
-		         <div class="form-group">
+		<div class="row-fluid">
+	        <div class="form-group">
 		         <label class="col-md-1 col_style_label" >登录名</label>
-		            <div class="col-md-4 ">
-		            	<input class="form-control" id="_loginName" name="_loginName" type="text" placeholder="请输入登录名..."/>
-		            </div>
-		            <label class="col-md-1"></label>
-		            <label class="col-md-1 col_style_label">电话号码</label>
-		            <div class="col-md-4 ">
-		            	<input class="form-control" id="_phoneNumber" name="_phoneNumber" type="text" placeholder="请输入电话号码..."/>
-		            </div>
+		         <div class="col-md-4 ">
+		           	<input class="form-control" id="_loginName" name="_loginName" type="text" placeholder="请输入登录名..."/>
+	             </div>
+	             <label class="col-md-1"></label>
+   	             <label class="col-md-1 col_style_label">电话号码</label>
+		         <div class="col-md-4">
+		            <input class="form-control" id="_phoneNumber" name="_phoneNumber" type="text" placeholder="请输入电话号码..."/>
 		         </div>
-	         </div>   
-        </form>
+		     </div>
+	    </div>   
         
         <div align="right" style="padding-top: 50px;">   
 		   <div class="btn-group">  
@@ -293,12 +291,17 @@
 		 });
 		 
 		 $(".add").click(function() {
-			 $("#mydiv input").each(function() {
+			 
+			 var frm = document.subfrm;
+			  frm.action = "userManager/toModify?userId=";
+			 frm.submit(); 
+			 
+			 /* $("#mydiv input").each(function() {
 				 $(this).val('');
 			 });
 			 $('#title').text('添加用户');
 			 $('#savebtn').text('保存');
-			 $("#themodal").modal("show");
+			 $("#themodal").modal("show"); */
 		 });
 		 
 		 $(".cancel").click(function(){
