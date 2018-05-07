@@ -18,7 +18,7 @@
 		</div>
 		
 		<div id="toolbar">
-			<button id="insertbtn" class="btn btn-default"><i class="glyphicon glyphicon-plus"></i> 插入行</button>
+			<button id="insertbtn" class="btn btn-primary"><i class="glyphicon glyphicon-plus"></i> 插入行</button>
 		</div>
 		<table id="mytable"></table>
 		<input type="hidden" name="dictId" value="${dictId}">
@@ -31,8 +31,9 @@
 	
 	<script type="text/javascript">
 	    var $table = $('#mytable');
+	    var url = 'dictManager/searchSysDictDatas?dictId=${dictId}';
 	    $table.bootstrapTable({
-	    	url: 'dictManager/searchSysDictDatas?dictId=${dictId}',
+	    	url: url,
             method: 'post',                      //请求方式（*）
             striped: true,                      //是否显示行间隔色
             cache: false,                       //是否使用缓存，默认为true，所以一般情况下需要设置一下这个属性
@@ -62,9 +63,9 @@
 				}
             },{
                 field: 'dictDataCode',
-                title: '字典键值',
+                title: '字典编码',
                 formatter: function operateFormatter(value, row, index) {
-					var i = ['<div><input class="form-control" type="text"  name="dictDataCode" value="' + row.dictDataCode + 
+					var i = ['<div><input class="form-control" type="text" title="必填！" placeholder="字典编码，不允许为空..." name="dictDataCode" value="' + row.dictDataCode + 
 					         '" onchange=\'reloadRowData($(this),'+index+')\'/></div>'];
 					return i.join('');
 				}
@@ -72,7 +73,7 @@
                 field: 'dictDataName',
                 title: '字典标签',
                 formatter: function operateFormatter(value, row, index) {
-					var i = ['<div><input class="form-control" type="text"  name="dictDataName" value="' + row.dictDataName + 
+					var i = ['<div><input class="form-control" type="text" title="必填！" name="dictDataName" placeholder="字典标签，不允许为空..." value="' + row.dictDataName + 
 					         '" onchange=\'reloadRowData($(this),'+index+')\'/></div>'];
 					return i.join('');
 				}
@@ -95,7 +96,7 @@
                 field: 'remarks',
                 title: '备注信息',
                 formatter: function operateFormatter(value, row, index) {
-					var i = ['<div><input class="form-control" type="text" name="remarks" value="' + row.remarks +
+					var i = ['<div><input class="form-control" type="text" placeholder="备注信息..." name="remarks" value="' + row.remarks +
 					         '" onchange=\'reloadRowData($(this),'+index+')\'/></div>'];
 					return i.join('');
 				}
@@ -114,6 +115,7 @@
 			var v = obj.val();
 			var n = obj.attr("name");
 			$table.bootstrapTable('getOptions').data[index][n] = v;
+			$table.bootstrapTable('getOptions').data[index]['updateDate'] = new Date().Format("yyyy-MM-dd hh:mm:ss");
 		}
 	    
 	    $insertbtn = $('#insertbtn');
@@ -147,14 +149,13 @@
 				type : 'post',
 				url : "dictManager/saveSysDictDatas?dictId=${dictId}",
 				contentType : 'application/json;charset=utf-8', //设置请求头信息
-				cache : false,
-				dataType : "json",
+				dataType : "text",
 				data : JSON.stringify(data),
-				success: function (data, status) {
+				success: function (data) {
 					toastr.success(data);
+					$table.bootstrapTable('refresh', {url: url});
 				},
-				error: function (data, status) {
-					alert(status);
+				error: function (data) {
 					toastr.error("操作失败!!!");
 				}
 			}); 

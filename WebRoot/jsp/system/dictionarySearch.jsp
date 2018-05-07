@@ -90,7 +90,9 @@
 		$("#status").bootstrapSwitch();
 		
 	    var $table = $('#mytable');
+	    var url = "dictManager/searchSysDictTypes";
 	    $table.bootstrapTable({
+	    	url: url,
             method: 'post',                      //请求方式（*）
             striped: true,                      //是否显示行间隔色
             contentType: "application/x-www-form-urlencoded",//如果是点击查询按钮请求数据必须加这条
@@ -128,7 +130,7 @@
                 title: '更新时间',
             }, {
                 field: 'status',
-                title: '状态'
+                title: '是否生效'
             }, {
                 field: 'remarks',
                 title: '备注信息'
@@ -155,7 +157,7 @@
 	  
 	    $(".search").click(function(){
 	    	$table.bootstrapTable('refreshOptions',{pageNumber:1});
-	    	$table.bootstrapTable('refresh', {url: 'dictManager/searchSysDictTypes'});
+	    	$table.bootstrapTable('refresh', {url: url});
 	    })
 	    
 	    $(".add").click(function() {

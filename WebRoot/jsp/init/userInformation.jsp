@@ -16,10 +16,14 @@
 	<div class="container">
 		<div class="panel-body">
 			<ul id="myTab" class="nav nav-tabs" >
+			<c:if test="${type == 'personal' }">
 				<li class="active"><a href="#home" data-toggle="tab"> 个人信息 </a></li>
-				<li><a href="#password" data-toggle="tab">修改密码</a></li>
+			</c:if>
+			<li class="<c:if test="${type=='password'}">active</c:if>"><a href="#password" data-toggle="tab">修改密码</a></li>
 			</ul>
+			
 			<div id="myTabContent" class="tab-content" style="padding-top: 50px;">
+				<c:if test="${type == 'personal' }">
 				<div class="tab-pane fade in active" id="home">
 					<form id="frm" name="frm" action="" method="post" class="form-horizontal">
 						<div class="form-group">
@@ -78,7 +82,9 @@
 						</div>
 					</form>
 				</div>
-				<div class="tab-pane fade" id="password">
+				</c:if>
+				
+				<div class="tab-pane fade <c:if test="${type=='password'}">in active</c:if>" id="password">
 					<jsp:include page="/jsp/init/userPassword.jsp"/>
 				</div>
 			</div>

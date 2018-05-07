@@ -14,8 +14,10 @@
 
 	<div class="container">
 		<form id="frm" name="frm" action="userManager/saveUser" method="post" class="form-horizontal">
-			<legend>基本信息</legend>
-			<div class="form-group">
+			<div class="modal-header">
+				<h4 class="modal-title" id="title"><i class="fa fa-list-alt"></i> 基本信息</h4>
+			</div>
+			<div class="form-group" style="padding-top: 10px;">
 				<div class="col-sm-6">
 					<div class="form-group">
 						<label class="col-xs-3 col_style_label">登录名：</label>
@@ -81,8 +83,10 @@
 					
 			</div>
 			
-			<legend>角色分配</legend>
-			<div class="form-group">
+			<div class="modal-header">
+				<h4 class="modal-title" id="title"><i class="fa fa-group"></i> 角色分配</h4>
+			</div>
+			<div class="form-group" style="padding-top: 10px;">
 			<label class="col-xs-2 col_style_label">角色分配：</label>
 			<div class="col-sm-9">
 				<select class="form-control" id="rolesSelect" name="roleIds">
@@ -92,8 +96,8 @@
 			<input type="hidden" id="userId" name="userId" value="${user.userId }">
 			<input type="hidden" id="creater" name="creater" value="${user.creater }">
 			<div align="right">
-				<button id="savebtn" type="submit" class="btn btn-success" ><i class="glyphicon glyphicon-ok"></i>保 存</button>
-				<button type="button" class="btn btn-default" onclick="javascript:history.back(-1);"><i class="fa fa-reply-all"></i>返 回</button>
+				<button id="savebtn" type="submit" class="btn btn-success" ><i class="glyphicon glyphicon-ok"></i> 保 存</button>
+				<button type="button" class="btn btn-default" onclick="javascript:history.back(-1);"><i class="fa fa-reply-all"></i> 返 回</button>
 			</div>
 		</form>
 	</div>
@@ -107,6 +111,8 @@
 		     multiple:true,//是否多选
 		     allowClear: true//允许清空
 		}); 
+		
+		//角色select初始设置默认选择值
 		var array = new Array();
 		<c:forEach items="${user.roles}" var="role" varStatus="status" >
 			var roleId = '${role.roleId}';

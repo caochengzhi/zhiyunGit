@@ -14,8 +14,8 @@
     </ol>
     
     <div class="container">
-    	<div class="modal-header">
-			<h4 class="modal-title" id="title">角色编辑</h4>
+		<div class="modal-header">
+			<h4 class="modal-title" id="title"><i class="fa fa-group"></i> 角色编辑</h4>
 		</div>
 	    <div class="panel-body">
 	        <ul class="nav nav-tabs">
@@ -23,16 +23,7 @@
 		        	<li class="active"><a href="#home" data-toggle="tab">角色设置</a></li>
 		        </c:if>
 		        <c:if test="${type != 'modify' }">
-		        	<c:choose>
-		        		<c:when test="${type == 'update' }">
-		        			<li class="active">
-		        		</c:when>
-		        		<c:otherwise>
-		        			<li>
-		        		</c:otherwise>
-		        	</c:choose>
-			          	<a href="#profile" data-toggle="tab">权限菜单</a>
-			          </li>
+			       <li class="<c:if test="${type=='update'}">active</c:if>"><a href="#profile" data-toggle="tab">权限菜单</a></li>
 		        </c:if>
 	        </ul>
 
@@ -68,8 +59,8 @@
 							           </div>
 							      </div>
 							      <div class="modal-footer">
-									   <button id="savebtn" type="submit" class="btn btn-success" ><i class="glyphicon glyphicon-ok"></i>保 存</button>
-							           <button type="button" class="btn btn-default" onclick="javascript:history.back(-1);"><i class="fa fa-reply-all"></i>返 回</button>  
+									   <button id="savebtn" type="submit" class="btn btn-success" ><i class="glyphicon glyphicon-ok"></i> 保 存</button>
+							           <button type="button" class="btn btn-default" onclick="javascript:history.back(-1);"><i class="fa fa-reply-all"></i> 返 回</button>  
 								  </div>
 								  <input type="hidden" id="roleId" name="roleId" value="${role.roleId }">
 								  <input type="hidden" id="resourceCodes" name="resourceCodes" value="${role.resourceCodes }">
@@ -80,23 +71,15 @@
             	</c:if>
             	
              	<c:if test="${type != 'modify'}">
-             		<c:choose>
-             			<c:when test="${type == 'update' }">
-             				<div class="tab-pane fade in active" id="profile">
-             			</c:when>
-             			<c:otherwise>
-             				<div class="tab-pane fade" id="profile">
-             			</c:otherwise>
-             		</c:choose>
-	             <div class="tab-pane fade in active" id="profile">
+	             <div class="tab-pane fade <c:if test="${type=='update'}">in active</c:if>" id="profile">
 	                <div class="pre-scrollable">
 						<ul id="tree" class="ztree"></ul>
 					</div>
 					<c:if test="${type == 'update' }">
 						<div class="modal-footer">
 							<form id="myform" name="myform" action="roleManager/saveRole" method="post" class="form-horizontal" >
-								<button id="savebtn" type="submit" class="btn btn-success" ><i class="glyphicon glyphicon-ok"></i>保 存</button>
-								<button type="button" class="btn btn-default" onclick="javascript:history.back(-1);"><i class="fa fa-reply-all"></i>返 回</button>  
+								<button id="savebtn" type="submit" class="btn btn-success" ><i class="glyphicon glyphicon-ok"></i> 保 存</button>
+								<button type="button" class="btn btn-default" onclick="javascript:history.back(-1);"><i class="fa fa-reply-all"></i> 返 回</button>  
 								<input type="hidden" id="roleId" name="roleId" value="${role.roleId }">
 								<input type="hidden" id="resourceCodes" name="resourceCodes" value="${role.resourceCodes }">
 								<input type="hidden" id="operatorType" name="operatorType" value="${type}">
@@ -146,15 +129,22 @@
 <script type="text/javascript">
 
 	$(document).ready(function() {
-		
-		 $('#roleTypeselect').select2({
+		var $roleSelect = $('#roleTypeselect');
+		$roleSelect.select2({
 			 data: getAjaxJson('dictType=roleType','dictManager/getDictSelect'),
 		     placeholder:'请选择...',//默认文字提示
 		     language: "zh-CN",//汉化
-		     //multiple:true,//是否多选
 		     allowClear: true//允许清空
 		}); 
-		$("#roleTypeselect").select2('val','1');
+		//角色select初始设置默认选择值
+		<c:choose>
+			<c:when test="${role.roleType == null}">
+				$roleSelect.select2('val',-1);
+			</c:when>
+			<c:otherwise>
+				$roleSelect.select2('val','${role.roleType}');
+			</c:otherwise>
+		</c:choose>
 		
 	    $('#myform').bootstrapValidator({
 	        container: 'tooltip',

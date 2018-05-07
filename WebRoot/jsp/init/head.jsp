@@ -49,12 +49,30 @@
 				<i class="fa fa-caret-down"></i>
 			</a>
 			<ul class="dropdown-menu dropdown-user">
-				<li><a href="#"><i class="fa fa-user fa-fw"></i> User Profile</a></li>
-				<li><a href="#"><i class="fa fa-gear fa-fw"></i> Settings</a></li>
+				<li><a href="javascript:onPersonal('personal')"><i class="fa fa-user"></i> 个人中心</a></li>
+				<li><a href="javascript:onPersonal('password')"><i class="fa fa-key"></i> 修改密码</a></li>
 				<li class="divider"></li>
-				<li><a href="#"><i class="fa fa-sign-out fa-fw"></i>Logout</a></li>
+				<li><a href="javascript:logout()"><i class="fa fa-sign-out"></i> 安全登出</a></li>
 			</ul>
 		</li>
 		
 	</ul>
+	
+	<form action="" name="frm2"  method=""></form>
+	<script type="text/javascript">
+		function logout(){
+			var frm = document.frm2;
+			frm.method = "get";
+			frm.action = 'logout';
+			frm.submit();
+		}
+		
+		function onPersonal(type){
+			var frm = document.frm2;
+			frm.action = 'userInformation?type='+type;
+			frm.method = "post";
+			frm.target = "iframepage";
+			frm.submit();
+		}
+	</script>
 </html>
