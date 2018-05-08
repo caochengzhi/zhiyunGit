@@ -192,5 +192,38 @@
 	        	$('#status').bootstrapSwitch('state',false);
 		});	
 	</script>
+	
+	<script type="text/javascript">
+	$(document).ready(function() {
+		$('#myform').bootstrapValidator({
+	        container: 'tooltip',
+	        feedbackIcons: {
+	            valid: 'glyphicon glyphicon-ok',
+	            invalid: 'glyphicon glyphicon-remove',
+	            validating: 'glyphicon glyphicon-refresh'
+	        },
+	        fields: {
+	        	dictName: {
+	                validators: {
+	                    stringLength: {
+	                        min: 2,
+	                        message: '字典名称不允许少于2个字符!'
+	                    },
+	                    notEmpty: {
+	                        message: '字典名称不允许为空!'
+	                    }
+	                }
+	            },
+	            dictType:{
+	            	validators: {
+		            	notEmpty: {
+	                        message: '字典类型不允许为空!'
+	                    }
+	            	}
+	            }
+	        }
+	    });
+	});
+	</script>
 </body>
 </html>
