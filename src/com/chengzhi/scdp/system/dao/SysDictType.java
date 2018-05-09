@@ -17,7 +17,7 @@ public class SysDictType extends AbstractModel {
 	private Long dictId;
 	private String dictName;
 	private String dictType;
-	private char status;
+	private String status;
 	private String createBy;
 	private Date createDate;
 	private String updateBy;
@@ -29,7 +29,12 @@ public class SysDictType extends AbstractModel {
 	public SysDictType() {
 	}
 
-	public SysDictType(String dictName, String dictType, char status,
+	public SysDictType(String createBy,Date createDate) {
+		this.createBy = createBy;
+		this.createDate = createDate;
+	}
+	
+	public SysDictType(String dictName, String dictType, String status,
 			String createBy, Date createDate, String updateBy) {
 		this.dictName = dictName;
 		this.dictType = dictType;
@@ -39,7 +44,7 @@ public class SysDictType extends AbstractModel {
 		this.updateBy = updateBy;
 	}
 
-	public SysDictType(String dictName, String dictType, char status,
+	public SysDictType(String dictName, String dictType, String status,
 			String createBy, Date createDate, String updateBy,
 			String updateDate, String remarks, List<SysDictDatas> sysDictDatases) {
 		this.dictName = dictName;
@@ -85,11 +90,11 @@ public class SysDictType extends AbstractModel {
 		this.dictType = dictType;
 	}
 
-	public char getStatus() {
+	public String getStatus() {
 		return this.status;
 	}
 
-	public void setStatus(char status) {
+	public void setStatus(String status) {
 		this.status = status;
 	}
 

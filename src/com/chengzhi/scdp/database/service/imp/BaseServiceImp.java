@@ -38,6 +38,11 @@ public abstract class BaseServiceImp<T extends AbstractModel, PK extends Seriali
     }
     
     @Override
+	public void updateWithSql(String sql) {
+    	baseDao.updateWithSql(sql);
+	}
+
+	@Override
     public void merge(T model) {
         baseDao.merge(model);
     }

@@ -13,6 +13,8 @@ public interface IBaseService<T extends AbstractModel, PK extends Serializable> 
      void saveOrUpdate(T model);
     
      void update(T model);
+     
+     void updateWithSql(String sql);
     
      void merge(T model);
 

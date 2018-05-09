@@ -1,5 +1,6 @@
 package com.chengzhi.scdp.system.dao;
 
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
@@ -12,15 +13,17 @@ public class SysUsers extends AbstractModel {
 	private String loginName;
 	private String loginPassword;
 	private String userName;
-	private Character sex;
+	private String sex;
 	private String phoneNumber;
-	private Character isValid;
+	private String telephone;
+	private String isValid;
 	private String email;
 	private Date createDate;
+	private String lastUpdateBy;
 	private String lastUpdateDate;
 	private String creater;
 	private Long organizationId;
-	private List<Roles> roles;
+	private List<Roles> roles = new ArrayList<Roles>();
 	
 	public SysUsers() {
 	}
@@ -41,6 +44,14 @@ public class SysUsers extends AbstractModel {
 		this.organizationId = organizationId;
 	}
 
+	public String getLastUpdateBy() {
+		return lastUpdateBy;
+	}
+
+	public void setLastUpdateBy(String lastUpdateBy) {
+		this.lastUpdateBy = lastUpdateBy;
+	}
+
 	public List<Roles> getRoles() {
 		return roles;
 	}
@@ -55,6 +66,14 @@ public class SysUsers extends AbstractModel {
 
 	public void setLastUpdateDate(String lastUpdateDate) {
 		this.lastUpdateDate = lastUpdateDate;
+	}
+
+	public String getTelephone() {
+		return telephone;
+	}
+
+	public void setTelephone(String telephone) {
+		this.telephone = telephone;
 	}
 
 	public String getEmail() {
@@ -101,11 +120,11 @@ public class SysUsers extends AbstractModel {
 		this.userName = userName;
 	}
 
-	public Character getSex() {
+	public String getSex() {
 		return this.sex;
 	}
 
-	public void setSex(Character sex) {
+	public void setSex(String sex) {
 		this.sex = sex;
 	}
 
@@ -117,11 +136,11 @@ public class SysUsers extends AbstractModel {
 		this.phoneNumber = phoneNumber;
 	}
 
-	public Character getIsValid() {
+	public String getIsValid() {
 		return this.isValid;
 	}
 
-	public void setIsValid(Character isValid) {
+	public void setIsValid(String isValid) {
 		this.isValid = isValid;
 	}
 

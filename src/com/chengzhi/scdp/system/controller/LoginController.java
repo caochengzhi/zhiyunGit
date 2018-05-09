@@ -16,9 +16,11 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.chengzhi.scdp.Constants;
+import com.chengzhi.scdp.common.Exceptions.CustomException;
 import com.chengzhi.scdp.database.controller.BaseController;
 import com.chengzhi.scdp.system.dao.SysUsers;
 import com.chengzhi.scdp.system.service.ISysUserService;
+import com.chengzhi.scdp.tools.StringUtil;
 
 /**
  * 系统登录
@@ -62,10 +64,9 @@ public class LoginController extends BaseController{
     @RequestMapping(value="/index",method = {RequestMethod.GET})
     public String index(Model model,HttpServletRequest request, HttpSession session) {
         SysUsers user = Constants.getCurrentSysUser();
-        System.out.println(user);
-        if(user == null)
+        if(user == null){
         	return "redirect:/";
-        else{
+        }else{
         	/*session.setAttribute("userId",user.getUser_id());
             model.addAttribute("userActive", user); //将数据放置到域对象
             //菜单转化为自定义的json
@@ -87,6 +88,37 @@ public class LoginController extends BaseController{
 		Subject currentUser = SecurityUtils.getSubject();
 		currentUser.logout();
 		return "redirect:/";
+	}
+	
+	@RequestMapping(value="/userInformation",method = {RequestMethod.POST})
+	public String persionalConfig(HttpServletRequest request, String type){
+		SysUsers currentUser = Constants.getCurrentSysUser();
+		request.setAttribute("user", currentUser);
+		request.setAttribute("type", type);
+		return "init/userInformation";
+	}
+	
+	@RequestMapping(value="/changePassword",method = {RequestMethod.POST},produces={"text/html;charset=UTF-8;"})
+	public @ResponseBody String changePassword(HttpServletRequest request) throws CustomException{
+		String oldPw = request.getParameter("loginPassword");
+		String newPw = request.getParameter("confirmPassword");
+		String reNewPw = request.getParameter("reConfirmPassword");
+		if(StringUtil.isNullOrEmpty(oldPw) || StringUtil.isNullOrEmpty(newPw)
+				|| StringUtil.isNullOrEmpty(reNewPw))
+			return "输入密码不允许为空！";
+		
+		if(!newPw.equals(reNewPw))
+			return "前后两次输入密码不一致，请检查！";
+		
+		if(oldPw.equals(newPw))
+			return "新密码不允许与旧密码相同！";
+		
+		SysUsers user = Constants.getCurrentSysUser();
+		if(!oldPw.equals(StringUtil.decrypt(user.getLoginPassword())))
+			return "输入原有密码错误！";
+		
+		sysUserService.updateUserPassword(user, newPw);
+		return "success";
 	}
 	
 	/**

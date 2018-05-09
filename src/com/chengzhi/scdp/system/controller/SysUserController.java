@@ -13,14 +13,14 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
+import com.chengzhi.scdp.common.Exceptions.CustomException;
 import com.chengzhi.scdp.database.controller.BaseController;
 import com.chengzhi.scdp.database.dao.PageList;
+import com.chengzhi.scdp.system.dao.Roles;
 import com.chengzhi.scdp.system.dao.SysUsers;
+import com.chengzhi.scdp.system.service.IRolesService;
 import com.chengzhi.scdp.system.service.ISysUserService;
-import com.chengzhi.scdp.tools.DateTimeUtil;
 import com.chengzhi.scdp.tools.JsonUtil;
-import com.chengzhi.scdp.tools.ObjectUtil;
-import com.chengzhi.scdp.tools.StringUtil;
 
 /**
  * 用户管理
@@ -32,6 +32,8 @@ import com.chengzhi.scdp.tools.StringUtil;
 public class SysUserController extends BaseController{
 	@Autowired
 	private ISysUserService sysUserService;
+	@Autowired
+	private IRolesService rolesService;
 
 	@RequestMapping(value = "/toSearch", method = {RequestMethod.GET})
 	public String toSearch(){
@@ -47,7 +49,7 @@ public class SysUserController extends BaseController{
 	 * @param sortOrder
 	 * @return
 	 */
-	@RequestMapping(value = "/search",method = RequestMethod.POST)
+	@RequestMapping(value = "/search",method = RequestMethod.POST,produces={"text/html;charset=UTF-8;"})
 	public @ResponseBody String searchUsers(SysUsers user,int pageNumber,int pageSize,String sortName, String sortOrder){
 		JSONObject result = new JSONObject();
 		PageList<SysUsers> pageCond = sysUserService.findByCond(user, sortName, sortOrder, pageNumber, pageSize);
@@ -68,6 +70,8 @@ public class SysUserController extends BaseController{
 	public String toModify(HttpServletRequest request,@RequestParam Long userId){
 		if(userId != null){
 			SysUsers user = sysUserService.findUserById(userId);
+			List<Roles> roles = rolesService.findRolesByUserId(userId);
+			user.setRoles(roles);
 			request.setAttribute("user", user);
 		}
 		return "system/userModify";
@@ -78,7 +82,7 @@ public class SysUserController extends BaseController{
 		String msg = null;
 		try{
 			SysUsers user = sysUserService.findUserById(userId);
-			user.setIsValid('N');
+			user.setIsValid("N");
 			sysUserService.update(user);
 			msg = "用户注销成功";
 		}catch(Exception e){
@@ -89,20 +93,11 @@ public class SysUserController extends BaseController{
 	
 	/**
 	 * 新增和更新用户
+	 * @throws CustomException 
 	 */
 	@RequestMapping(value="/saveUser",method={RequestMethod.POST})
-	public String saveUser(SysUsers cond,Long userId){
-		if(cond.getUserId() != null){
-			SysUsers user = sysUserService.findUserById(cond.getUserId());
-			ObjectUtil.copyPropertiesIgnoreNull(user, cond);
-			cond.setLastUpdateDate(DateTimeUtil.getLastUpdateDate());
-			sysUserService.update(user);
-		}else{
-			cond.setLastUpdateDate(DateTimeUtil.getLastUpdateDate());
-			cond.setCreater(getUserName());
-			cond.setLoginPassword(StringUtil.encrypt(cond.getLoginPassword()));
-			sysUserService.save(cond);
-		}
+	public String saveUser(SysUsers cond,Long[] roleIds) throws CustomException{
+		sysUserService.saveOrUpdateSysUser(cond, roleIds);
 		return "system/userSearch";
 	}
 }

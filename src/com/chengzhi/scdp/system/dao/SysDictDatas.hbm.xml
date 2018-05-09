@@ -8,10 +8,13 @@
             <column name="id" />
             <generator class="identity" />
         </id>
-        <property name="dictName" type="string">
-            <column name="dict_name" length="100" not-null="true"/>
+        <property name="dictDataCode" type="string">
+            <column name="dict_data_code" length="50" not-null="true"/>
         </property>
-        <property name="status" type="char">
+        <property name="dictDataName" type="string">
+            <column name="dict_data_name" length="100" not-null="true"/>
+        </property>
+        <property name="status" type="string">
             <column name="status" length="1" not-null="true"/>
         </property>
         <property name="dictId" type="java.lang.Long">

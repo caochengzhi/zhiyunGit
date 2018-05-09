@@ -123,7 +123,10 @@ public class SysDictionaryServiceImp extends BaseServiceImp<SysDictDatas, Long> 
 			for(SysDictDatas datas : list){
 				String code = datas.getDictDataCode();
 				String codeName = datas.getDictDataName();
-				if(StringUtil.isNullOrEmpty(codeName) || StringUtil.isNullOrEmpty(code)){
+				
+				//字典编码或名称或无效不做缓存
+				if(StringUtil.isNullOrEmpty(codeName) || StringUtil.isNullOrEmpty(code) 
+						|| "N".equals(datas.getStatus())){
 					continue;
 				}
 				dictMap.put(datas.getId(), codeName);

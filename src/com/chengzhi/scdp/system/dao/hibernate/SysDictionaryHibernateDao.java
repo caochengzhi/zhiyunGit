@@ -9,5 +9,4 @@ import com.chengzhi.scdp.system.dao.SysDictDatas;
 @Repository("sysDictionaryDao")
 public class SysDictionaryHibernateDao extends BaseHibernateDao<SysDictDatas, Long> implements ISysDictionaryDao{
 
-
 }

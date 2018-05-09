@@ -17,20 +17,27 @@
         <property name="userName" type="java.lang.String">
             <column name="user_name" length="100" not-null="true" />
         </property>
-        <property name="sex" type="java.lang.Character">
+        <property name="sex" type="java.lang.String">
             <column name="sex" length="1" />
         </property>
         <property name="phoneNumber" type="java.lang.String">
             <column name="phone_number" length="20" />
         </property>
+        <property name="telephone" type="java.lang.String">
+            <column name="Telephone" length="20" />
+        </property>
+        
         <property name="email" type="java.lang.String">
             <column name="email" length="100" />
         </property>
-        <property name="isValid" type="java.lang.Character">
+        <property name="isValid" type="java.lang.String">
             <column name="is_valid" length="1" />
         </property>
         <property name="createDate" type="java.util.Date">
             <column name="create_date" length="19"/>
+        </property>
+        <property name="lastUpdateBy" type="java.lang.String">
+            <column name="last_update_by" length="50" />
         </property>
         <property name="lastUpdateDate" type="java.lang.String">
             <column name="last_update_date" length="20" />

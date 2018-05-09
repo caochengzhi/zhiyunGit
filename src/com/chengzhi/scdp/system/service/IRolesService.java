@@ -13,7 +13,18 @@ public interface IRolesService extends IBaseService<Roles, Long>{
 	
 	abstract List<Roles> findRolesByIds(Long[] roleIds, Long organizationId);
 	
+	abstract List<Roles> findRolesByIds(Long[] roleIds);
+	
 	abstract List<RoleResource> findRoleResourcesByRoleIds(Long[] roleIds, Long organizationId);
+	
+	/**
+	 * 根据用户id查询对应的角色
+	 * @param userId
+	 * @return
+	 */
+	abstract List<Roles> findRolesByUserId(Long userId, Long organizationId);
+	
+	abstract List<Roles> findRolesByUserId(Long userId);
 	
 	/**
 	 * 获取角色对应的权限编码
@@ -22,4 +33,5 @@ public interface IRolesService extends IBaseService<Roles, Long>{
 	abstract List<String> getRolesOfCodes(Long[] roleIds);
 	
 	abstract void saveRoleWithPermission(Roles role,String operatorType)throws CustomException;
+	
 }

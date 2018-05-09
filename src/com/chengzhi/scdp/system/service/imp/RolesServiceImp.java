@@ -49,6 +49,11 @@ public class RolesServiceImp extends BaseServiceImp<Roles, Long> implements IRol
 	}
 
 	@Override
+	public List<Roles> findRolesByIds(Long[] roleIds) {
+		return rolesDao.findRolesByIds(roleIds, null);
+	}
+
+	@Override
 	public List<Roles> findRolesByIds(Long[] roleIds, Long organizationId) {
 		return rolesDao.findRolesByIds(roleIds, organizationId);
 	}
@@ -76,6 +81,19 @@ public class RolesServiceImp extends BaseServiceImp<Roles, Long> implements IRol
 			}
 		);
 		return sourceCodes;
+	}
+
+	/**
+	 * 查询用户所拥有的角色
+	 */
+	@Override
+	public List<Roles> findRolesByUserId(Long userId, Long organizationId) {
+		return rolesDao.findRolesByUserId(userId, organizationId);
+	}
+	
+	@Override
+	public List<Roles> findRolesByUserId(Long userId) {
+		return this.findRolesByUserId(userId, null);
 	}
 
 	/**

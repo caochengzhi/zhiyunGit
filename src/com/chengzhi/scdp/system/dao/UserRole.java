@@ -23,6 +23,11 @@ public class UserRole extends AbstractModel {
 		this.roleId = roleId;
 		this.organizationId = organizationId;
 	}
+	
+	public UserRole(Long userId, Long roleId) {
+		this.userId = userId;
+		this.roleId = roleId;
+	}
 
 	public Long getId() {
 		return this.id;

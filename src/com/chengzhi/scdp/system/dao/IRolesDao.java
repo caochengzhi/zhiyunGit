@@ -10,4 +10,6 @@ public interface IRolesDao extends IBaseDao<Roles, Long>{
 	
 	abstract List<Roles> findRolesByIds(Long[] roleIds, Long organizationId);
 	
+	abstract List<Roles> findRolesByUserId(Long userId, Long organizationId);
+	
 }

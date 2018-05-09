@@ -13,8 +13,9 @@ public class SysDictDatas extends AbstractModel{
 	private Long id;
 	private Long dictId;
 	private String dictType;
-	private String dictName;
-	private char status;
+	private String dictDataCode;
+	private String dictDataName;
+	private String status;
 	private String createBy;
 	private Date createDate;
 	private String updateBy;
@@ -25,19 +26,17 @@ public class SysDictDatas extends AbstractModel{
 	public SysDictDatas() {
 	}
 
-	public SysDictDatas(String dictName, char status,
+	public SysDictDatas(String dictName, String status,
 			String createBy, Date createDate, String updateBy) {
-		this.dictName = dictName;
 		this.status = status;
 		this.createBy = createBy;
 		this.createDate = createDate;
 		this.updateBy = updateBy;
 	}
 
-	public SysDictDatas(String dictName, char status,
+	public SysDictDatas(String dictName, String status,
 			String createBy, Date createDate, String updateBy,
 			String updateDate, String remarks) {
-		this.dictName = dictName;
 		this.status = status;
 		this.createBy = createBy;
 		this.createDate = createDate;
@@ -78,19 +77,27 @@ public class SysDictDatas extends AbstractModel{
 		this.dictType = dictType;
 	}
 
-	public String getDictName() {
-		return this.dictName;
+	public String getDictDataCode() {
+		return dictDataCode;
 	}
 
-	public void setDictName(String dictName) {
-		this.dictName = dictName;
+	public void setDictDataCode(String dictDataCode) {
+		this.dictDataCode = dictDataCode;
 	}
 
-	public char getStatus() {
+	public String getDictDataName() {
+		return dictDataName;
+	}
+
+	public void setDictDataName(String dictDataName) {
+		this.dictDataName = dictDataName;
+	}
+
+	public String getStatus() {
 		return this.status;
 	}
 
-	public void setStatus(char status) {
+	public void setStatus(String status) {
 		this.status = status;
 	}
 

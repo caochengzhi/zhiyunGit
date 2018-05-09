@@ -17,7 +17,7 @@ public class ResourcesHibernateDao extends BaseHibernateDao<Resources, Long> imp
 	@Override
 	public List<Resources> getPermissionsByIds(Long[] resourceIds, Long organizationId) {
 		Criteria c = this.getSession().createCriteria(Resources.class);
-		c.add(Restrictions.eq("organizationId", organizationId));
+		c.add(Restrictions.eq("organizationId", organizationId != null?organizationId : getUser().getOrganizationId()));
 		c.add(Restrictions.in("resourceId", resourceIds));
 		return c.list();
 	}

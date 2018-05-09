@@ -23,7 +23,7 @@ public class UserRoleHibernateDao extends BaseHibernateDao<UserRole, Long> imple
 			String queryString = "from UserRole as model where model.userId = :userId and model.organizationId = :organizationId";
 			Query queryObject = getSession().createQuery(queryString);
 			queryObject.setParameter("userId", userId);
-			queryObject.setParameter("organizationId", organizationId);
+			queryObject.setParameter("organizationId", organizationId != null?organizationId : getUser().getOrganizationId());
 			list = queryObject.list();
 		} catch (RuntimeException re) {
 			logger.error("find by property name failed", re);
