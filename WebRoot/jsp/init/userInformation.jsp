@@ -25,7 +25,7 @@
 			<div id="myTabContent" class="tab-content" style="padding-top: 50px;">
 				<c:if test="${type == 'personal' }">
 				<div class="tab-pane fade in active" id="home">
-					<form id="frm" name="frm" action="" method="post" class="form-horizontal">
+					<form id="frm_un" name="frm_un" action="updateSysUser" method="post" class="form-horizontal">
 						<div class="form-group">
 							<div id="imagediv" class="col-sm-5">
 								<img alt="个人头像设置" src="images/backgrounds/1.jpg" width="100%" height="40%">
@@ -34,7 +34,7 @@
 								<div class="form-group">
 									<label class="col-xs-3 col_style_label">登录名：</label>
 									<div class="input-group col-sm-8">
-										<input type="text" class="form-control" name="loginName" id="loginName" value="${user.loginName}" placeholder="输入登录名...不可为空" /> 
+										<input type="text" class="form-control" readonly name="loginName" id="loginName" value="${user.loginName}" placeholder="输入登录名...不可为空" /> 
 										<span class="input-group-addon"> <span class="fa fa-key"></span></span>
 									</div>
 								</div>
@@ -62,7 +62,7 @@
 								<div class="form-group">
 									<label class="col-xs-3 col_style_label">办公电话：</label>
 									<div class="input-group col-sm-8">
-										<input type="text" class="form-control" name="Telephone" id="Telephone" value="${user.telephone }" placeholder="请输入固定电话（固话加区号）" /> 
+										<input type="text" class="form-control" name="telephone" id="telephone" value="${user.telephone }" placeholder="请输入固定电话（固话加区号）" /> 
 										<span class="input-group-addon"> <span class="glyphicon glyphicon-phone-alt"></span></span>
 									</div>
 								</div>
@@ -77,9 +77,10 @@
 							</div>
 						</div>
 						<div class="modal-footer">
-							<button id="savebtn" type="submit" class="btn btn-success" ><i class="glyphicon glyphicon-ok"></i>保 存</button>
+							<button type="submit" class="savebtn btn btn-success" ><i class="glyphicon glyphicon-ok"></i>保 存</button>
 							<button type="button" class="btn btn-default" onclick="javascript:history.back(-1);"><i class="fa fa-reply-all"></i>返 回</button>  
 						</div>
+						<input type="hidden" name="userId" value="${user.userId }">
 					</form>
 				</div>
 				</c:if>
@@ -92,8 +93,7 @@
 	</div>
 <script type="text/javascript">
 	$(document).ready(function() { 
-		
-		$('#frm').bootstrapValidator({
+		$('#frm_un').bootstrapValidator({
 	        container: 'tooltip',
 	        feedbackIcons: {
 	            valid: 'glyphicon glyphicon-ok',
@@ -133,12 +133,12 @@
 	            phoneNumber: {
 	                validators: {
 	                    digits: {
-	                        message: '电话号码格式错误'
+	                        message: '手机号码格式错误'
 	                    },
 	                    phone:{country:'CN'}
 	                }
 	            },
-	            Telephone:{
+	            telephone:{
 	            	validators: {
 	                    digits: {
 	                        message: '电话号码格式错误,固话请加区号'

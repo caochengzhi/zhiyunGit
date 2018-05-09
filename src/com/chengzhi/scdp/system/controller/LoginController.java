@@ -20,6 +20,8 @@ import com.chengzhi.scdp.common.Exceptions.CustomException;
 import com.chengzhi.scdp.database.controller.BaseController;
 import com.chengzhi.scdp.system.dao.SysUsers;
 import com.chengzhi.scdp.system.service.ISysUserService;
+import com.chengzhi.scdp.tools.DateTimeUtil;
+import com.chengzhi.scdp.tools.ObjectUtil;
 import com.chengzhi.scdp.tools.StringUtil;
 
 /**
@@ -93,12 +95,23 @@ public class LoginController extends BaseController{
 	@RequestMapping(value="/userInformation",method = {RequestMethod.POST})
 	public String persionalConfig(HttpServletRequest request, String type){
 		SysUsers currentUser = Constants.getCurrentSysUser();
-		request.setAttribute("user", currentUser);
+		request.setAttribute("user", sysUserService.findUserById(currentUser.getUserId()));
 		request.setAttribute("type", type);
 		return "init/userInformation";
 	}
 	
-	@RequestMapping(value="/changePassword",method = {RequestMethod.POST},produces={"text/html;charset=UTF-8;"})
+	@RequestMapping(value="/updateSysUser", method = {RequestMethod.POST})
+	public String updateSysUser(SysUsers cond){
+		if(cond.getUserId() != null){
+			SysUsers user = sysUserService.findUserById(cond.getUserId());
+			ObjectUtil.copyPropertiesIgnoreNull(cond, user);
+			user.setLastUpdateDate(DateTimeUtil.getLastUpdateDate());
+			sysUserService.update(user);
+		}
+		return "forward:/userInformation?type=personal";
+	}
+	
+	@RequestMapping(value = "/changePassword", method = {RequestMethod.POST}, produces = {"text/html;charset=UTF-8;"})
 	public @ResponseBody String changePassword(HttpServletRequest request) throws CustomException{
 		String oldPw = request.getParameter("loginPassword");
 		String newPw = request.getParameter("confirmPassword");
