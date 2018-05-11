@@ -1,6 +1,5 @@
 <%@page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
 
-<%@page import="com.chengzhi.scdp.Constants" %>
 <html lang="zh-CN">
 <head>
 <meta charset="utf-8">
@@ -44,7 +43,7 @@
 						</div>
 					</div>
 					<div class="form-bottom">
-						<form id="myform" role="form" action="login/verify" method="post" class="login-form">
+						<form id="myform" role="form" action="login" method="post" class="login-form">
 							<div class="form-group">
 								<label>登录名</label>
 								<div class="input-group">
@@ -81,8 +80,6 @@
 
 							<button type="submit" class="btn-success btn">登&nbsp;&nbsp;&nbsp;录</button>
 							<b style="color: red;">${errorMsg}</b>
-							<input type="hidden" name="<%=Constants.TOKEN_NAME%>" value="<%=request.getAttribute(Constants.TOKEN_NAME)%>"/>
-							<input type="hidden" name="<%=request.getAttribute(Constants.TOKEN_NAME)%>" value="<%=request.getAttribute(Constants.TOKEN)%>"/>  
 						</form>
 					</div>
 				</div>
@@ -126,11 +123,10 @@
 	            };
 	            $.ajax({
 	                 type: "POST",
-	                 url: "login/checkCode",
+	                 url: "checkKaptcha",
 	                 data: {verityCode:params.kaptcha},
 	                 dataType: "json",
 	                 success: function(data){
-	                	 alert(data);
 	                	 if(data.msg==-1)
 	                        $('#kaptcha').val('');
 	                 }
