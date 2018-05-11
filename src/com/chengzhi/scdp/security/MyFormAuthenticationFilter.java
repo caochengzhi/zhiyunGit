@@ -53,6 +53,7 @@ public class MyFormAuthenticationFilter extends FormAuthenticationFilter{
 	@Override
 	protected boolean isAccessAllowed(ServletRequest request,ServletResponse response, Object mappedValue) {
 		logger.info("*************isAccessAllowed***************");
+		
 		if(isLoginRequest(request, response)){
 			
 			if(isLoginSubmission(request, response)){
