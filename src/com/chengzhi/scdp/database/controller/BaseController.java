@@ -1,7 +1,12 @@
 package com.chengzhi.scdp.database.controller;
 
+import java.io.UnsupportedEncodingException;
+import java.net.URLEncoder;
 import java.util.ArrayList;
 import java.util.List;
+
+import javax.servlet.http.Cookie;
+import javax.servlet.http.HttpServletResponse;
 
 import net.sf.json.JSONArray;
 
@@ -61,5 +66,14 @@ public class BaseController {
 	
 	public EhCacheUtil getCache(){
 		return ehcache;
+	}
+	
+	public void setCookie(HttpServletResponse response) throws UnsupportedEncodingException{
+            Cookie cookie = new Cookie("username",URLEncoder.encode(getUserName(), "UTF-8"));
+            //设置时间为1年
+            cookie.setMaxAge(30*24*3600);   
+            cookie.setPath("/");
+            //把cookie给浏览器
+            response.addCookie(cookie);
 	}
 }

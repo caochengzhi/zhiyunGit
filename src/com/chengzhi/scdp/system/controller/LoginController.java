@@ -1,6 +1,9 @@
 package com.chengzhi.scdp.system.controller;
 
+import java.io.UnsupportedEncodingException;
+
 import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
 import net.sf.json.JSONObject;
@@ -62,9 +65,10 @@ public class LoginController extends BaseController{
      * @param model
      * @param session
      * @return
+	 * @throws UnsupportedEncodingException 
      */
     @RequestMapping(value="/index",method = {RequestMethod.GET})
-    public String index(Model model,HttpServletRequest request, HttpSession session) {
+    public String index(Model model,HttpServletRequest request,HttpServletResponse response) throws UnsupportedEncodingException {
         SysUsers user = Constants.getCurrentSysUser();
         if(user == null){
         	return "redirect:/";
@@ -75,6 +79,8 @@ public class LoginController extends BaseController{
             SimplePropertyPreFilter filter = new SimplePropertyPreFilter(MenuAndPower.class, "id","pId","text","url");     
             String json = JSON.toJSONString(user.getMenuAndPowers(), filter);
             model.addAttribute("menu", json);*/
+        	this.setCookie(response);
+
             return "/main";
         }
         
