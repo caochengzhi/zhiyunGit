@@ -14,6 +14,7 @@ import org.apache.shiro.web.util.WebUtils;
 import com.chengzhi.scdp.Constants;
 import com.chengzhi.scdp.security.beans.CaptchaUsernamePasswordToken;
 import com.chengzhi.scdp.system.dao.SysUsers;
+import com.chengzhi.scdp.tools.StringUtil;
 
 /**
  * 扩展 FormAuthenticationFilter类，首先覆盖 createToken方法，以便获取CaptchaUsernamePasswordToken实例；
@@ -39,11 +40,15 @@ public class MyFormAuthenticationFilter extends FormAuthenticationFilter{
 	 * @return
 	 */
 	protected Long getOrganizationId(ServletRequest request) { 
+		
 		String organization =  WebUtils.getCleanParam(request, Constants.ORGANIZATIONID); 
-		if(organization != null)
+		
+		if(!StringUtil.isNullOrEmpty(organization) && StringUtil.isDigit(organization))
+		{
 			return Long.parseLong(organization);
-		else
-			return null;
+		}
+		
+		return null;
 	}
 	
 	

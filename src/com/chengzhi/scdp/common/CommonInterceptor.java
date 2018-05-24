@@ -54,9 +54,10 @@ public class CommonInterceptor extends HandlerInterceptorAdapter{
 		//XSS攻击：跨站脚本攻击,设置https的cookie可以预防xss攻击
 		response.addHeader("Set-Cookie", "uid=112; Path=/; Secure; HttpOnly");
 		
+		//判断session超时，如果超时跳转登录页面
 		Subject subject = SecurityUtils.getSubject();
 		Object currentUser = subject.getPrincipal();
-		if(currentUser == null){
+		if(currentUser == null && !"/scdp/login".equals(request.getRequestURI())){
 			toAlert(response);
 			return false;
 		}
@@ -129,16 +130,12 @@ public class CommonInterceptor extends HandlerInterceptorAdapter{
 	
 	//前台弹出alert框
 	public void toAlert( HttpServletResponse response){
-	       
 	    try {
 	         response.setContentType("text/html;charset=UTF-8");
 	         response.setCharacterEncoding("UTF-8");
-	            
 	         OutputStreamWriter out=new OutputStreamWriter(response.getOutputStream());   
-	         
 	         String msg="由于您长时间没有操作，session已过期，请重新登录！";
 	         msg=new String(msg.getBytes("UTF-8"));
-	         
 	         out.write("<meta http-equiv='Content-Type' content='text/html';charset='UTF-8'>");
 	         out.write("<script>");
 	         out.write("alert('"+msg+"');");
@@ -146,7 +143,6 @@ public class CommonInterceptor extends HandlerInterceptorAdapter{
 	         out.write("</script>");
 	         out.flush();
 	         out.close();
-
 	    } catch (IOException e) {
 	        e.printStackTrace();
 	    }
