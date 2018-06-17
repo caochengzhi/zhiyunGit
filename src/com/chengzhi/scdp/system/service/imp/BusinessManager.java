@@ -48,8 +48,8 @@ public class BusinessManager extends AbstractBusinessManager{
 			String loginName = authcToken.getUsername();
 			String passWord = new String(authcToken.getPassword());
 			Long organizationId = authcToken.getOrganiaztionId();
-			SysUsers cond = new SysUsers(loginName, passWord, organizationId);
-			cond.setIsValid("Y");
+			String isValid = "Y";
+			SysUsers cond = new SysUsers(loginName, passWord, organizationId, isValid);
 			List<SysUsers> list = sysUserService.findByCond(cond);
 			
 			currentUser = list.size() == 1?list.get(0):null;

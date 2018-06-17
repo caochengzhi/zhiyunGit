@@ -11,6 +11,11 @@ import com.chengzhi.scdp.system.dao.ISysDictTypeDao;
 import com.chengzhi.scdp.system.dao.SysDictType;
 import com.chengzhi.scdp.system.service.ISysDictTypeService;
 
+/**
+ * 数据字典服务类
+ * @author beisi
+ *
+ */
 @Service
 public class SysDictTypeServiceImp extends BaseServiceImp<SysDictType, Long> implements ISysDictTypeService{
 

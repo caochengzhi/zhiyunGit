@@ -38,10 +38,11 @@ public class SysUsers extends AbstractModel {
 		this.organizationId = organizationId;
 	}
 
-	public SysUsers(String loginName, String loginPassword, long organizationId) {
+	public SysUsers(String loginName, String loginPassword, long organizationId, String isValid) {
 		this.loginName = loginName;
 		this.loginPassword = loginPassword;
 		this.organizationId = organizationId;
+		this.isValid = isValid;
 	}
 
 	public String getLastUpdateBy() {

@@ -4,6 +4,7 @@ import java.util.List;
 
 import javax.servlet.http.HttpServletRequest;
 
+import net.sf.json.JSONArray;
 import net.sf.json.JSONObject;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -20,6 +21,7 @@ import com.chengzhi.scdp.system.dao.Roles;
 import com.chengzhi.scdp.system.dao.SysUsers;
 import com.chengzhi.scdp.system.service.IRolesService;
 import com.chengzhi.scdp.system.service.ISysUserService;
+import com.chengzhi.scdp.tools.DateTimeUtil;
 import com.chengzhi.scdp.tools.JsonUtil;
 
 /**
@@ -77,12 +79,28 @@ public class SysUserController extends BaseController{
 		return "system/userModify";
 	}
 	
+	@RequestMapping(value = "/getUsersByRoleId", method = {RequestMethod.POST}, produces={"text/html;charset=UTF-8"})
+	public @ResponseBody String getUsersByRoleId(@RequestParam Long roleId){
+		JSONArray array = new JSONArray();
+		if(roleId != null){
+			List<SysUsers> users = sysUserService.findSysUsersByRoleId(roleId);
+			for(SysUsers user : users){
+				JSONObject json = JSONObject.fromObject(user);
+				array.add(json);
+			}
+		}
+		
+		return array.toString();
+	}
+	
 	@RequestMapping(value="/cancalUser",method={RequestMethod.POST},produces={"text/html;charset=UTF-8;","application/json;"})
 	public @ResponseBody String cancalUser(@RequestParam(value="userId",required=true) Long userId){
 		String msg = null;
 		try{
 			SysUsers user = sysUserService.findUserById(userId);
 			user.setIsValid("N");
+			user.setLastUpdateBy(getUserName());
+			user.setLastUpdateDate(DateTimeUtil.getLastUpdateDate());
 			sysUserService.update(user);
 			msg = "用户注销成功";
 		}catch(Exception e){

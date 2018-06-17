@@ -1,6 +1,5 @@
 package com.chengzhi.scdp.system.service.imp;
 
-import java.util.ArrayList;
 import java.util.List;
 
 import org.apache.log4j.Logger;
@@ -14,7 +13,6 @@ import com.chengzhi.scdp.database.dao.IBaseDao;
 import com.chengzhi.scdp.database.service.imp.BaseServiceImp;
 import com.chengzhi.scdp.system.dao.ISysUserDao;
 import com.chengzhi.scdp.system.dao.IUserRoleDao;
-import com.chengzhi.scdp.system.dao.Roles;
 import com.chengzhi.scdp.system.dao.SysUsers;
 import com.chengzhi.scdp.system.dao.UserRole;
 import com.chengzhi.scdp.system.service.IRolesService;
@@ -88,14 +86,18 @@ public class SysUserServiceImp extends BaseServiceImp<SysUsers, Long> implements
 		//保存用户对应的角色信息
 		if(roleIds != null && roleIds.length > 0){
 			Long userId = user.getUserId();
-			List<Roles> roles = rolesService.findRolesByIds(roleIds);
+			/*List<Roles> roles = rolesService.findRolesByIds(roleIds);
 			rolesService.updateWithSql("delete from user_role where user_id = "+userId+" and organization_id = "+Constants.getCurrentSysUser().getOrganizationId());
 			List<UserRole> list = new ArrayList<UserRole>();
 			for(Roles role : roles){
 				UserRole ur = new UserRole(userId,role.getRoleId());
 				list.add(ur);
+			}*/
+			rolesService.updateWithSql("delete from user_role where user_id = "+userId+" and organization_id = "+Constants.getCurrentSysUser().getOrganizationId());
+			for(Long roleId : roleIds){
+				UserRole ur = new UserRole(userId,roleId);
+				userRoleDao.save(ur);
 			}
-			saveUserRoles(list);
 		}
 	}
 
@@ -113,6 +115,13 @@ public class SysUserServiceImp extends BaseServiceImp<SysUsers, Long> implements
 		sysUserDao.updateWithSql(sql);
 		
 	}
-	
+
+	/**
+	 * 查询指定角色下包含的所有用户
+	 */
+	@Override
+	public List<SysUsers> findSysUsersByRoleId(Long roleId) {
+		return sysUserDao.findSysUsersByRoleId(roleId);
+	}
 	
 }

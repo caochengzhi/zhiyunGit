@@ -65,6 +65,20 @@ public class RoleController extends BaseController{
 	}
 	
 	/**
+	 * 更新角色所包含的用户
+	 * @param roleId 角色id
+	 * @param userIds 用户id数组
+	 * @throws CustomException 
+	 */
+	@RequestMapping(value = "/updateRoleOfUsers", method = RequestMethod.POST)
+	public String updateRoleOfUsers(Long roleId, Long[] userIds) throws CustomException{
+		if(roleId == null)
+			throw new CustomException("请选择相应角色进行操作!");
+		rolesService.updateRoleOfUsers(roleId, userIds);
+		return "system/roleSearch";
+	}
+	
+	/**
 	 * 查询角色对应的权限
 	 * @param roleId
 	 * @return

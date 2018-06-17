@@ -34,4 +34,6 @@ public interface IRolesService extends IBaseService<Roles, Long>{
 	
 	abstract void saveRoleWithPermission(Roles role,String operatorType)throws CustomException;
 	
+	abstract void updateRoleOfUsers(Long roleId, Long[] userIds)throws CustomException;
+	
 }

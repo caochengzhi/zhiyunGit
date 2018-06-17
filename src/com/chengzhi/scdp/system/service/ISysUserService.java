@@ -19,4 +19,6 @@ public interface ISysUserService extends IBaseService<SysUsers, Long>{
 	
 	abstract void updateUserPassword(SysUsers user,String newPassword)throws CustomException;
 	
+	abstract List<SysUsers> findSysUsersByRoleId(Long roleId);
+	
 }

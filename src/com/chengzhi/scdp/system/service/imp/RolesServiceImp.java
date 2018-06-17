@@ -14,8 +14,10 @@ import com.chengzhi.scdp.database.dao.IBaseDao;
 import com.chengzhi.scdp.database.service.imp.BaseServiceImp;
 import com.chengzhi.scdp.system.dao.IRoleResourceDao;
 import com.chengzhi.scdp.system.dao.IRolesDao;
+import com.chengzhi.scdp.system.dao.IUserRoleDao;
 import com.chengzhi.scdp.system.dao.RoleResource;
 import com.chengzhi.scdp.system.dao.Roles;
+import com.chengzhi.scdp.system.dao.UserRole;
 import com.chengzhi.scdp.system.service.IRolesService;
 import com.chengzhi.scdp.tools.StringUtil;
 
@@ -29,6 +31,8 @@ public class RolesServiceImp extends BaseServiceImp<Roles, Long> implements IRol
 	protected Logger logger = Logger.getLogger(this.getClass());
 
 	private IRolesDao rolesDao;
+	@Autowired
+	private IUserRoleDao userRoleDao;
 	@Autowired
 	private IRoleResourceDao userResourceDao;
 	
@@ -123,6 +127,23 @@ public class RolesServiceImp extends BaseServiceImp<Roles, Long> implements IRol
 					obj.setResourceCode(code);
 					userResourceDao.save(obj);
 				}
+			}
+		}
+	}
+
+	/**
+	 * 更新指定角色所包含的用户列表
+	 */
+	@Override
+	public void updateRoleOfUsers(Long roleId, Long[] userIds) throws CustomException {
+		//先删除角色对应的所有历史权限
+		userResourceDao.updateWithSql("delete from user_role where role_id = "+roleId+" and organization_id = "+Constants.getCurrentSysUser().getOrganizationId());
+		
+		//再保存新设置的权限
+		if(userIds != null){
+			for(Long userId : userIds){
+				UserRole ur = new UserRole(userId,roleId);
+				userRoleDao.save(ur);
 			}
 		}
 	}

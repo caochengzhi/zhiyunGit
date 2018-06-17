@@ -26,6 +26,7 @@ public class Roles extends AbstractModel {
 	
 	private List<Resources> permissions = new ArrayList<Resources>();
 	private List<RoleResource> roleResourceCodes = new ArrayList<RoleResource>();
+	private List<Roles> roles = new ArrayList<Roles>();
 
 	public Roles() {
 	}
@@ -41,6 +42,14 @@ public class Roles extends AbstractModel {
 		this.roleName = roleName;
 		this.description = description;
 		this.organizationId = organizationId;
+	}
+
+	public List<Roles> getRoles() {
+		return roles;
+	}
+
+	public void setRoles(List<Roles> roles) {
+		this.roles = roles;
 	}
 
 	public List<RoleResource> getRoleResourceCodes() {

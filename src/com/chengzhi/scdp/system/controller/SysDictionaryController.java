@@ -19,6 +19,7 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
+import com.chengzhi.scdp.common.Exceptions.CustomException;
 import com.chengzhi.scdp.database.controller.BaseController;
 import com.chengzhi.scdp.database.dao.PageList;
 import com.chengzhi.scdp.system.dao.SysDictDatas;
@@ -28,6 +29,7 @@ import com.chengzhi.scdp.system.service.ISysDictionaryService;
 import com.chengzhi.scdp.tools.DateTimeUtil;
 import com.chengzhi.scdp.tools.JsonUtil;
 import com.chengzhi.scdp.tools.ObjectUtil;
+import com.chengzhi.scdp.tools.StringUtil;
 /**
  * 数据字典服务类
  * @author beisi
@@ -65,7 +67,11 @@ public class SysDictionaryController extends BaseController{
 	 * @return
 	 */
 	@RequestMapping(value = "/saveSysDictType", method = {RequestMethod.POST})
-	public String saveSysDictType(SysDictType cond){
+	public String saveSysDictType(SysDictType cond)throws CustomException{
+		
+		if(StringUtil.isNullOrEmpty(cond.getDictName()) || StringUtil.isNullOrEmpty(cond.getDictType()))
+			throw new CustomException("字典名称或类型不允许为空!");
+		
 		SysDictType sdt = null;
 		
 		if(cond.getDictId() != null)
