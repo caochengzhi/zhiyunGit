@@ -29,6 +29,26 @@ public class Constants {
 	 
 	 public static final String ERROR_PAGE = "/jsp/error/error.jsp";
 	 
+	 /**
+	  * ehcache缓存分类
+	  * @author beisi
+	  */
+	 public static class EhcacheTypes{
+		 public static final String dict_cache = "dictCache";
+	 }
+	 
+	 /**
+	  * 数据操作类型
+	  * @author beisi
+	  */
+	 public static class Operator{
+		 public static final String ADD = "add";
+		 public static final String MODIFY = "modify";
+		 public static final String DELETE = "delete";
+		 public static final String SEARCH = "search";
+		 public static final String UPDATE = "update";
+	 }
+	 
 	 public static SysUsers getCurrentSysUser(){
 		 Subject subject = SecurityUtils.getSubject();//第一步:获取我们的主体
 	     SysUsers user = (SysUsers) subject.getPrincipal();
