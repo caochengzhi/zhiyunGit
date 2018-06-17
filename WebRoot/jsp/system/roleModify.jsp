@@ -133,6 +133,7 @@
 		$roleSelect.select2({
 			 data: getAjaxJson('dictType=roleType','dictManager/getDictSelect'),
 		     placeholder:'请选择...',//默认文字提示
+		     theme: "classic",
 		     language: "zh-CN",//汉化
 		     allowClear: true//允许清空
 		}); 
