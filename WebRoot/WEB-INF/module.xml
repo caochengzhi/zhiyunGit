@@ -1,0 +1,74 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE module[
+<!ELEMENT module (module*,action*)>
+<!ELEMENT action (#PCDATA)>
+<!ATTLIST module id ID #REQUIRED>
+<!ATTLIST module title CDATA #IMPLIED>
+<!ATTLIST module action CDATA "toSearch">
+<!ATTLIST module modulename CDATA #IMPLIED>
+<!ATTLIST module class CDATA #IMPLIED>
+<!ATTLIST module visible (true|false) "true">
+<!ATTLIST module grantall (true|false) "false">
+<!ATTLIST action name CDATA #REQUIRED>
+<!ATTLIST action button CDATA #IMPLIED>
+<!ATTLIST action title CDATA #IMPLIED>
+<!ATTLIST action grantall (true|false) "false">
+]>
+<!-- 
+注意：
+1、module默认的action是tosearch
+2、module或action的grantall属性表示是否允许所有人访问，只能是true或false
+3、module的visible属性用于控制是否在菜单中显示
+4、action的title用户作为分配权限时显示的描述，buttion属性表示该action对应的toolbar按钮名
+ -->
+<module id="root" visible="false" grantall="true" action="">
+	
+	<module id="system" title="系统管理">
+		<module id="roleManager" title="角色管理">
+			<action name="add" title="添加角色"/>
+			<action name="modify" title="编辑角色"/>
+			<action name="modify_permission" title="编辑权限"/>
+			<action name="view_permission" title="查看权限"/>
+		</module>
+		<module id="userManager" title="用户管理">
+			<action name="search" title="查询用户"/>
+			<action name="add" title="添加用户"/>
+			<action name="modify" title="编辑用户"/>
+			<action name="cancel" title="注销用户"/>
+		</module>
+		<module id="dictManager" title="字典管理">
+			<action name="search" title="查询用户"/>
+			<action name="add" title="添加用户"/>
+			<action name="modify" title="编辑用户"/>
+		</module>
+		<module id="logManager" title="日志管理">
+			<action name="add" title="查询"/>
+		</module>
+		
+	</module>
+	
+	<module id="order" title="订单管理">
+		<module id="orderManager" title="订单查询">
+			<action name="search" title="查询"/>
+		</module>
+	</module>
+	
+	<module id="customer" title="客户管理">
+		<module id="customerManager" title="客户查询">
+			<action name="search" title="查询"/>
+		</module>
+	</module>
+	
+	<module id="supplier" title="供应商管理">
+		<module id="supplier" title="供应商管">
+			<action name="search" title="查询"/>
+		</module>
+	</module>
+	
+	<module id="storage" title="仓储管理">
+		<module id="storage" title="库存管理">
+			<action name="search" title="查询"/>
+		</module>
+	</module>
+
+</module>
