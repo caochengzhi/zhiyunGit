@@ -64,18 +64,18 @@ public class SysUserServiceImp extends BaseServiceImp<SysUsers, Long> implements
 	@Override
 	public void saveOrUpdateSysUser(SysUsers cond, Long[] roleIds)throws CustomException{
 		SysUsers user = null;
-		
-		if(cond.getUserId() == null){
+		if(cond.getUserId() == null)
+		{
 			if(StringUtil.isNullOrEmpty(cond.getLoginPassword()))
 				throw new CustomException("保存新用户密码不允许为空");
 				
 			user = new SysUsers();
-			ObjectUtil.copyPropertiesIgnoreNull(cond, user);
-			
 			user.setCreater(Constants.getCurrentSysUser().getLoginName());
 			user.setLoginPassword(StringUtil.encrypt(cond.getLoginPassword()));
+			ObjectUtil.copyPropertiesIgnoreNull(cond, user);
 		}
-		else{
+		else
+		{
 			user = findUserById(cond.getUserId());
 			ObjectUtil.copyPropertiesIgnoreNull(cond, user);
 		}
@@ -86,13 +86,6 @@ public class SysUserServiceImp extends BaseServiceImp<SysUsers, Long> implements
 		//保存用户对应的角色信息
 		if(roleIds != null && roleIds.length > 0){
 			Long userId = user.getUserId();
-			/*List<Roles> roles = rolesService.findRolesByIds(roleIds);
-			rolesService.updateWithSql("delete from user_role where user_id = "+userId+" and organization_id = "+Constants.getCurrentSysUser().getOrganizationId());
-			List<UserRole> list = new ArrayList<UserRole>();
-			for(Roles role : roles){
-				UserRole ur = new UserRole(userId,role.getRoleId());
-				list.add(ur);
-			}*/
 			rolesService.updateWithSql("delete from user_role where user_id = "+userId+" and organization_id = "+Constants.getCurrentSysUser().getOrganizationId());
 			for(Long roleId : roleIds){
 				UserRole ur = new UserRole(userId,roleId);

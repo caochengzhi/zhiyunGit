@@ -2,6 +2,7 @@ package com.chengzhi.scdp.system.service.imp;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.regex.Pattern;
 
 import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -35,6 +36,7 @@ public class RolesServiceImp extends BaseServiceImp<Roles, Long> implements IRol
 	private IUserRoleDao userRoleDao;
 	@Autowired
 	private IRoleResourceDao userResourceDao;
+	private Pattern SPLIT = Pattern.compile(":");
 	
 	@Autowired
 	@Qualifier("rolesDao")
@@ -77,13 +79,16 @@ public class RolesServiceImp extends BaseServiceImp<Roles, Long> implements IRol
 	@Override
 	public List<String> getRolesOfCodes(Long[] roleIds) {
 		List<String> sourceCodes = new ArrayList<String>();
-		List<RoleResource> list = this.findRoleResourcesByRoleIds(roleIds, null);
-		list.forEach((obj)-> {
-			String resourceCode = obj.getResourceCode();
-			if(!sourceCodes.contains(resourceCode))
-				sourceCodes.add(resourceCode);
+		if(roleIds != null && roleIds.length > 0)
+		{
+			List<RoleResource> list = findRoleResourcesByRoleIds(roleIds, null);
+			for(RoleResource obj : list){
+				String resourceCode = obj.getResourceCode();
+				//此处做重复判断，是因为一个用户可能包含多个不同的角色，而不同的角色对应的权限会有重复的
+				if(!sourceCodes.contains(resourceCode))
+					sourceCodes.add(resourceCode);
 			}
-		);
+		}
 		return sourceCodes;
 	}
 
@@ -108,25 +113,42 @@ public class RolesServiceImp extends BaseServiceImp<Roles, Long> implements IRol
 	@Override
 	public void saveRoleWithPermission(Roles role, String operatorType)throws CustomException{
 		//1、保存或修改角色
-		if(Constants.Operator.ADD.equals(operatorType) ||
-				Constants.Operator.MODIFY.equals(operatorType))
+		if(Constants.Operator.ADD.equals(operatorType) || Constants.Operator.MODIFY.equals(operatorType))
+		{
 			saveOrUpdate(role);
+		}
 		
 		//2、新增或更新角色权限
-		if(Constants.Operator.ADD.equals(operatorType) ||
-				Constants.Operator.UPDATE.equals(operatorType)){
+		if(Constants.Operator.ADD.equals(operatorType) || Constants.Operator.UPDATE.equals(operatorType))
+		{
 			Long roleId = role.getRoleId();
 			//先删除角色对应的所有历史权限
 			userResourceDao.updateWithSql("delete from role_resource where role_id = "+roleId+" and organization_id = "+Constants.getCurrentSysUser().getOrganizationId());
 			//再保存新设置的权限
-			if(!StringUtil.isNullOrEmpty(role.getResourceCodes())){
+			if(!StringUtil.isNullOrEmpty(role.getResourceCodes()))
+			{
+				List<RoleResource> array = new ArrayList<RoleResource>();
 				String[] codes = role.getResourceCodes().split(",");
 				for(String code : codes){
 					RoleResource obj = new RoleResource();
 					obj.setRoleId(roleId);
 					obj.setResourceCode(code);
-					userResourceDao.save(obj);
+					int length = SPLIT.split(code).length;
+					if(length == 2)
+					{
+						if(code.startsWith("root"))
+							obj.setActionType(Constants.MODEL);
+						else
+							obj.setActionType(Constants.MENU);
+						
+					}
+					else if(length == 3)
+					{
+						obj.setActionType(Constants.BUTTON);
+					}
+					array.add(obj);
 				}
+				userResourceDao.saveList(array);
 			}
 		}
 	}

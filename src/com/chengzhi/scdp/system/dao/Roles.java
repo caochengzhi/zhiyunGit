@@ -1,8 +1,5 @@
 package com.chengzhi.scdp.system.dao;
 
-import java.util.ArrayList;
-import java.util.List;
-
 import com.chengzhi.scdp.database.dao.AbstractModel;
 
 /**
@@ -24,9 +21,6 @@ public class Roles extends AbstractModel {
 	
 	private String resourceCodes;
 	
-	private List<Resources> permissions = new ArrayList<Resources>();
-	private List<RoleResource> roleResourceCodes = new ArrayList<RoleResource>();
-	private List<Roles> roles = new ArrayList<Roles>();
 
 	public Roles() {
 	}
@@ -42,22 +36,6 @@ public class Roles extends AbstractModel {
 		this.roleName = roleName;
 		this.description = description;
 		this.organizationId = organizationId;
-	}
-
-	public List<Roles> getRoles() {
-		return roles;
-	}
-
-	public void setRoles(List<Roles> roles) {
-		this.roles = roles;
-	}
-
-	public List<RoleResource> getRoleResourceCodes() {
-		return roleResourceCodes;
-	}
-
-	public void setRoleResourceCodes(List<RoleResource> roleResourceCodes) {
-		this.roleResourceCodes = roleResourceCodes;
 	}
 
 	public Long[] getRoleIdIn() {
@@ -76,10 +54,6 @@ public class Roles extends AbstractModel {
 		this.roleIdIn = roleIdIn;
 	}
 
-	public List<Resources> getPermissions() {
-		return permissions;
-	}
-
 	public String getRoleCode() {
 		return roleCode;
 	}
@@ -94,10 +68,6 @@ public class Roles extends AbstractModel {
 
 	public void setRoleType(Long roleType) {
 		this.roleType = roleType;
-	}
-
-	public void setPermissions(List<Resources> permissions) {
-		this.permissions = permissions;
 	}
 
 	public Long getRoleId() {

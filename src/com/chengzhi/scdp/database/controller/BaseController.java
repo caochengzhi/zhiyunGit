@@ -8,22 +8,18 @@ import java.util.List;
 import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletResponse;
 
-import net.sf.json.JSONArray;
-
-import org.springframework.beans.factory.annotation.Autowired;
-
 import com.chengzhi.scdp.Constants;
 import com.chengzhi.scdp.common.Exceptions.CustomException;
 import com.chengzhi.scdp.system.dao.SysUsers;
-import com.chengzhi.scdp.system.manager.EhCacheUtil;
 import com.chengzhi.scdp.system.manager.ModuleManager;
 import com.chengzhi.scdp.system.service.IRolesService;
 
 public class BaseController {
 
-	@Autowired
-	private EhCacheUtil ehcache;
-	
+	/**
+	 * 获取当前操作的用户名
+	 * @return
+	 */
 	public static String getUserName(){
 		SysUsers user = Constants.getCurrentSysUser();
 		String userName = user.getLoginName();
@@ -45,6 +41,24 @@ public class BaseController {
 		return manager.getRolesAclTree(resourceCodes);
 	}
 	
+	/**
+	 * 获取当前用户菜单
+	 * @param rolesService
+	 * @return
+	 */
+	public String getCurrentMenus(){
+		List<String> menusGroup = Constants.getCurrentSysUser().getMenusGroups();
+		if(menusGroup == null || menusGroup.size() == 0)
+			return null;
+		ModuleManager manager = ModuleManager.getInstance();
+		return manager.getSystemMenus(menusGroup);
+	}
+	
+	/**
+	 * 查询角色对应的权限列表
+	 * @param resource
+	 * @return
+	 */
 	public String getRoleViews(IRolesService rolesService, Long roleId)throws CustomException{
 		if(roleId == null)
 			throw new CustomException("getRoleViews出错，roleId不允许为空！");
@@ -59,21 +73,24 @@ public class BaseController {
 		
 	}
 	
-	public JSONArray getResources(){
-		ModuleManager manager = ModuleManager.getInstance();
-		return manager.getAllResource();
-	}
-	
-	public EhCacheUtil getCache(){
-		return ehcache;
-	}
-	
+	/**
+	 * 对用户名和账套设置cookie
+	 * @param response
+	 * @throws UnsupportedEncodingException
+	 */
 	public void setCookie(HttpServletResponse response) throws UnsupportedEncodingException{
-            Cookie cookie = new Cookie("username",URLEncoder.encode(getUserName(), "UTF-8"));
-            //设置时间为1年
-            cookie.setMaxAge(30*24*3600);   
-            cookie.setPath("/");
-            //把cookie给浏览器
-            response.addCookie(cookie);
+		Cookie cookie = new Cookie("username",URLEncoder.encode(getUserName(), "UTF-8"));
+		addCookie(response, cookie);
+		
+		cookie = new Cookie("organizationId",Constants.getCurrentSysUser().getOrganizationId()+"");
+		addCookie(response, cookie);
+	}
+	
+	private void addCookie(HttpServletResponse response, Cookie cookie) throws UnsupportedEncodingException{
+		//设置时间为1年
+		cookie.setMaxAge(30*24*3600);   
+		cookie.setPath("/");
+		//把cookie给浏览器
+		response.addCookie(cookie);
 	}
 }

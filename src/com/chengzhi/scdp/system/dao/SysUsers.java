@@ -1,6 +1,5 @@
 package com.chengzhi.scdp.system.dao;
 
-import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
@@ -23,7 +22,10 @@ public class SysUsers extends AbstractModel {
 	private String lastUpdateDate;
 	private String creater;
 	private Long organizationId;
-	private List<Roles> roles = new ArrayList<Roles>();
+	private List<String> buttonGroups;//按钮组权限
+	private List<String> menusGroups;//菜单组权限
+	private Long[] roleIds;
+	private List<Roles> roles;
 	
 	public SysUsers() {
 	}
@@ -43,6 +45,30 @@ public class SysUsers extends AbstractModel {
 		this.loginPassword = loginPassword;
 		this.organizationId = organizationId;
 		this.isValid = isValid;
+	}
+	
+	public List<String> getButtonGroups() {
+		return buttonGroups;
+	}
+
+	public void setButtonGroups(List<String> buttonGroups) {
+		this.buttonGroups = buttonGroups;
+	}
+
+	public List<String> getMenusGroups() {
+		return menusGroups;
+	}
+
+	public void setMenusGroups(List<String> menusGroups) {
+		this.menusGroups = menusGroups;
+	}
+
+	public Long[] getRoleIds() {
+		return roleIds;
+	}
+
+	public void setRoleIds(Long[] roleIds) {
+		this.roleIds = roleIds;
 	}
 
 	public String getLastUpdateBy() {

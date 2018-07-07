@@ -22,6 +22,7 @@ import com.chengzhi.scdp.Constants;
 import com.chengzhi.scdp.common.Exceptions.CustomException;
 import com.chengzhi.scdp.database.controller.BaseController;
 import com.chengzhi.scdp.system.dao.SysUsers;
+import com.chengzhi.scdp.system.service.IRolesService;
 import com.chengzhi.scdp.system.service.ISysUserService;
 import com.chengzhi.scdp.tools.DateTimeUtil;
 import com.chengzhi.scdp.tools.ObjectUtil;
@@ -37,6 +38,8 @@ public class LoginController extends BaseController{
 	
 	@Autowired
 	private ISysUserService sysUserService;
+	@Autowired
+	private IRolesService rolesService;
 	
 	/**
      * 登陆失败的处理
@@ -73,14 +76,8 @@ public class LoginController extends BaseController{
         if(user == null){
         	return "redirect:/";
         }else{
-        	/*session.setAttribute("userId",user.getUser_id());
-            model.addAttribute("userActive", user); //将数据放置到域对象
-            //菜单转化为自定义的json
-            SimplePropertyPreFilter filter = new SimplePropertyPreFilter(MenuAndPower.class, "id","pId","text","url");     
-            String json = JSON.toJSONString(user.getMenuAndPowers(), filter);
-            model.addAttribute("menu", json);*/
-        	this.setCookie(response);
-
+			model.addAttribute("menu", getCurrentMenus());
+        	setCookie(response);
             return "/main";
         }
         

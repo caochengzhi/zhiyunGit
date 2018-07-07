@@ -6,8 +6,12 @@ import org.apache.shiro.subject.Subject;
 import com.chengzhi.scdp.system.dao.SysUsers;
 
 public class Constants {
+	 
+	public static final String BUTTON = "button";
+	public static final String MENU = "menu";
+	public static final String MODEL = "model";
 	
-	 public static final int DEFAULT_PAGE_SIZE = 20;
+	public static final int DEFAULT_PAGE_SIZE = 20;
 	 
 	 public static final String JWT_ERRCODE_EXPIRE = "TOKEN_ERRCODE_EXPIRE_TOKEN签名过期";//Token超时异常
 	 public static final String JWT_ERRCODE_FAIL = "JWT_ERRCODE_FAIL_TOKEN签名验证不通过";//token校验失败

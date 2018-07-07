@@ -14,6 +14,7 @@ public class RoleResource extends AbstractModel {
 	private Long roleId;
 	private Long resourceId;
 	private String resourceCode;
+	private String actionType;//目前有3种类型：按钮button和菜单menu、模块model
 	private Long organizationId;
 	private Long[] roleIdIn;
 
@@ -48,6 +49,14 @@ public class RoleResource extends AbstractModel {
 
 	public Long getId() {
 		return this.id;
+	}
+
+	public String getActionType() {
+		return actionType;
+	}
+
+	public void setActionType(String actionType) {
+		this.actionType = actionType;
 	}
 
 	public void setId(Long id) {

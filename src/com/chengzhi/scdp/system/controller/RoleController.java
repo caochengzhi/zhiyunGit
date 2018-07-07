@@ -97,9 +97,8 @@ public class RoleController extends BaseController{
 	
 	/**
 	 * 新增或修改指定角色
-	 * @param roleId 角色id
-	 * @param roleName 角色名称
-	 * @param describe 角色描述
+	 * @param role 对角色对象前台传入参数的封装
+	 * @param operatorType 操作描述
 	 * @return
 	 * @throws CustomException 
 	 */

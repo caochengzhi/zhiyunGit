@@ -51,7 +51,7 @@ public abstract class BaseHibernateDao<T extends AbstractModel, PK extends Seria
 	
 	@Override
 	public T save(T model) {
-		model.setOrganizationId(getUser().getOrganizationId());;
+		model.setOrganizationId(getUser().getOrganizationId());
 		getSession().save(model);
 		return model;
 	}

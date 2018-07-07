@@ -16,7 +16,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 
 import com.chengzhi.scdp.Constants;
 import com.chengzhi.scdp.common.Exceptions.CustomException;
-import com.chengzhi.scdp.system.dao.Resources;
 import com.chengzhi.scdp.system.dao.Roles;
 import com.chengzhi.scdp.system.dao.SysUsers;
 import com.chengzhi.scdp.system.service.AbstractBusinessManager;
@@ -63,45 +62,25 @@ public class PermissionsRealm extends AuthorizingRealm{
      * 会触发doGetAuthorizationInfo此方法，以及jsp中调用role权限标签也会触发此方法
      */
 	@Override
-	protected AuthorizationInfo doGetAuthorizationInfo(PrincipalCollection princi) {
+	protected AuthorizationInfo doGetAuthorizationInfo(PrincipalCollection PrincipalCollection) {
 		logger.info("******doGetAuthorizationInfo*******");
 		SysUsers user = Constants.getCurrentSysUser();
         SimpleAuthorizationInfo simpleAuthorInfo = new SimpleAuthorizationInfo();  
         simpleAuthorInfo.addRoles(getRoles(user));
-        simpleAuthorInfo.addStringPermissions(getPermCodes(user));
+        simpleAuthorInfo.addStringPermissions(user.getButtonGroups());
         return simpleAuthorInfo;
 	}
 	
 	/**
-     * 获取权限，string存放的是权限编码
-     * @param user
-     * @return
-     */
-    private List<String> getPermCodes(SysUsers user) {
-        List<String> perms = new ArrayList<String>();
-        perms.add("aaa");
-        if(user.getRoles() != null){
-        	for (Roles role : user.getRoles()) {
-                List<Resources> _perms = role.getPermissions();
-                for (Resources _perm : _perms) {
-                    perms.add(_perm.getTitle());
-                }
-            }
-        }
-        return perms;
-    }
-    
-    /**
      * 获取角色集合，string存放的角色名称
      * @param user
      * @return
-     */
-    private List<String> getRoles(SysUsers user) {
+     */    
+	private List<String> getRoles(SysUsers user) {
         List<String> roles = new ArrayList<String>();
-        roles.add("xxxa");
         if(user.getRoles() != null){
         	for (Roles role : user.getRoles()) {
-                roles.add(role.getRoleName());
+                roles.add(role.getRoleCode());
             }
         }
         return roles;

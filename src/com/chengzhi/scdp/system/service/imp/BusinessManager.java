@@ -1,13 +1,13 @@
 package com.chengzhi.scdp.system.service.imp;
 
-import java.util.HashMap;
+import java.util.ArrayList;
 import java.util.List;
-import java.util.Map;
 
 import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import com.chengzhi.scdp.Constants;
 import com.chengzhi.scdp.common.Exceptions.CustomException;
 import com.chengzhi.scdp.security.beans.CaptchaUsernamePasswordToken;
 import com.chengzhi.scdp.system.dao.RoleResource;
@@ -54,33 +54,46 @@ public class BusinessManager extends AbstractBusinessManager{
 			
 			currentUser = list.size() == 1?list.get(0):null;
 			
-			if(currentUser != null){
-				Long userId = currentUser.getUserId();
-				
-				/*
-				 * 通过用户id查询用户角色关系表，获得当前用户所拥有的全部角色
-				 */
-				List<Roles> roles = rolesService.findRolesByUserId(userId, organizationId);
-				if(roles != null && roles.size() > 0){
-					//保存用户对于的角色
-					currentUser.setRoles(roles);
-					
-					Map<Long,Roles> roleMap = new HashMap<Long, Roles>();//查询用户所包含的角色
+			if(currentUser != null)
+			{
+				//通过用户id查询用户角色关系表，获得当前用户所拥有的全部角色
+				List<Roles> roles = rolesService.findRolesByUserId(currentUser.getUserId(), organizationId);
+				if(roles != null && roles.size() > 0)
+				{
 					Long[] roleIds = new Long[roles.size()];
 					for(int i = 0,len = roles.size();i < len;i++){
 						Roles role = roles.get(i);
-						roleMap.put(role.getRoleId(), role);
 						roleIds[i] = role.getRoleId();
 					}
 					
 					//保存角色对应的权限
 					List<RoleResource> roleResources = rolesService.findRoleResourcesByRoleIds(roleIds, organizationId);
-					if(roleResources != null && roleResources.size() > 0){
+					if(roleResources != null && roleResources.size() > 0)
+					{
+						List<String> buttonGroups = new ArrayList<String>();
+						List<String> menusGroups = new ArrayList<String>();
+						
 						for(RoleResource rs : roleResources){
-							Long roleId = rs.getRoleId();
-							roleMap.get(roleId).getRoleResourceCodes().add(rs);
+							String actionType = rs.getActionType();
+							String code = rs.getResourceCode();
+							if(Constants.BUTTON.equalsIgnoreCase(actionType))
+							{
+								buttonGroups.add(code);
+							}
+							else if(Constants.MENU.equalsIgnoreCase(actionType) || Constants.MODEL.equalsIgnoreCase(actionType))
+							{
+								menusGroups.add(code);
+							}
 						}
+						
+						currentUser.setButtonGroups(buttonGroups);//获取当前登录用户按钮组权限列表
+						currentUser.setMenusGroups(menusGroups);//获取当前登录用户菜单组权限列表
+						
 					}
+					
+					//保存用户对应的角色
+					currentUser.setRoles(roles);
+					currentUser.setRoleIds(roleIds);
 					
 				}
 			}

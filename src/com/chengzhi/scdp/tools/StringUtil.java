@@ -4,6 +4,7 @@ import java.io.IOException;
 import java.io.PrintWriter;
 import java.io.StringWriter;
 import java.util.StringTokenizer;
+import java.util.regex.Pattern;
 
 import org.apache.log4j.Logger;
 import org.apache.poi.hssf.usermodel.HSSFCell;
@@ -308,26 +309,15 @@ public class StringUtil {
         return false;   
     }   
   
-    /**  
-     * 判断字符串是否为数字
-     * @param s  
-     * @return  
-     */  
-    public static boolean isDigit(String s)   
-    {   
-        if (isNullOrEmpty(s))   
-        {   
-            return false;   
-        }   
-  
-        for(int i = s.length() - 1;i >= 0;i--)   
-        {   
-            if (!Character.isDigit(s.charAt(i))) return false;   
-        }   
-  
-        return true;   
-    }   
-  
+    /*
+     * 判断字符串是否为数字,整数不包含小数
+     * @param str 传入的字符串 
+     * @return 是整数返回true,否则返回false 
+   */
+     public static boolean isDigit(String str) {  
+           Pattern pattern = Pattern.compile("^[-\\+]?[\\d]*$");  
+           return pattern.matcher(str).matches();  
+     }
   
     /**  
      * @param text  

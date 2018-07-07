@@ -222,9 +222,162 @@ public class ModuleManager {
 		return map;
 	}
 	
+	private static void setChecked(JSONObject obj,List<String> resource,StringBuilder sBuilder){
+		obj.put("code", sBuilder.toString());
+		if(resource != null && resource.size() > 0){
+			if(resource.contains(sBuilder.toString()))
+				obj.put("checked", true);
+		}
+		sBuilder.setLength(0);
+	}
 	
-	public JSONArray getAllResource(){
+	/**
+	 * 获取系统左侧菜单
+	 * @param resource
+	 * @return
+	 */
+	public String getSystemMenus(List<String> resource){
 
+		Map<String,String> map = getModuleIds();
+		StringBuilder sb = new StringBuilder();
+		StringBuilder menus = new StringBuilder();
+		for(Iterator<String> it = map.keySet().iterator();it.hasNext();){
+			String subId = it.next();
+			String parentId = getParentId(subId);
+			
+			if(parentId == null) continue;
+			
+			sb.append(parentId).append(":").append(subId);
+			if(resource.contains(sb.toString())){
+				String subName = map.get(subId);
+				JSONObject obj = new JSONObject();
+				obj.put("id", subId);
+				obj.put("pId", parentId);
+				obj.put("name", subName);
+				if("root".equals(parentId))
+				{
+					if(menus.length() > 0)
+						menus.append("</ul></li>");
+					
+					menus.append("<li><a href=\"#\"><i class=\"fa fa-gear fa-fw\"></i>")
+					.append("<span class=\"menu-main-font\">").append(subName).append("</span>")
+					.append("<span class=\"fa arrow\"></span></a>")
+					.append("<ul class=\"nav nav-second-level\">");
+				}else
+				{
+					menus.append("<li><a id='").append(subId).append("' href=\"javascript:topage('").append(subId).append("','toSearch');\"")
+					.append("class=\"nav__item-link menu-sub-font\">").append(subName).append("</a></li>");
+				}
+				
+				if(!it.hasNext())
+					menus.append("</ul></li>");
+			}
+			
+			sb.setLength(0);
+		}
+		return menus.toString();
+	}
+	
+	
+	/**
+	 * 查询角色对应的权限列表，只显示当前角色所拥有的权限json列表。
+	 * @param resource
+	 * @return
+	 */
+	public String getRoleViews(List<String> resource){
+
+		JSONArray array = new JSONArray();
+		Map<String,String> map = getModuleIds();
+		StringBuilder sBuilder = new StringBuilder();
+		for(Iterator<String> it = map.keySet().iterator();it.hasNext();){
+			String subId = it.next();
+			String parentId = getParentId(subId);
+			if(parentId == null) continue;
+			
+			sBuilder.append(parentId).append(":").append(subId);
+			if(resource.contains(sBuilder.toString())){
+				String subName = map.get(subId);
+				JSONObject obj = new JSONObject();
+				obj.put("id", subId);
+				obj.put("pId", parentId);
+				obj.put("name", subName);
+				obj.put("open", true);
+				array.add(obj);
+			}
+			sBuilder.setLength(0);
+			
+			HashMap<String,Node> e = moduleAction.get(subId);
+			for(Iterator<String> subIt = e.keySet().iterator();subIt.hasNext();){
+				String subKey = subIt.next();
+				String title = getActionTitle(subId, subKey);
+				
+				if(resource != null && resource.size() > 0){
+					sBuilder.append(parentId).append(":").append(subId).append(":").append(subKey);
+					if(resource.contains(sBuilder.toString())){
+						JSONObject subObj = new JSONObject();
+						subObj.put("id", subKey);
+						subObj.put("pId", subId);
+						subObj.put("name", title);
+						
+						array.add(subObj);
+					}
+						
+				}
+				sBuilder.setLength(0);
+			}
+			
+		}
+		return array.toString();
+	}
+	
+	/**
+	 * 获取对应角色的权限菜单树,供编辑角色权限列表使用，
+	 * 此方法会列出所有权限列表，角色拥有的权限会被勾选，没有权限的不勾选
+	 * @return
+	 */
+	public String getRolesAclTree(List<String> resource){
+		JSONArray array = new JSONArray();
+		Map<String,String> map = getModuleIds();
+		StringBuilder sBuilder = new StringBuilder();
+		for(Iterator<String> it = map.keySet().iterator();it.hasNext();){
+			String subId = it.next();
+			String parentId = getParentId(subId);
+			if(parentId == null) continue;
+			
+			String subName = map.get(subId);
+			
+			JSONObject obj = new JSONObject();
+			obj.put("id", subId);
+			obj.put("pId", parentId);
+			obj.put("name", subName);
+			
+			sBuilder.append(parentId).append(":").append(subId);
+			setChecked(obj, resource, sBuilder);
+			
+			array.add(obj);
+			
+			HashMap<String,Node> e = moduleAction.get(subId);
+			for(Iterator<String> subIt = e.keySet().iterator();subIt.hasNext();){
+				String subKey = subIt.next();
+				String title = getActionTitle(subId, subKey);
+				
+				JSONObject subObj = new JSONObject();
+				subObj.put("id", subKey);
+				subObj.put("pId", subId);
+				subObj.put("name", title);
+				
+				sBuilder.append(parentId).append(":").append(subId).append(":").append(subKey);
+				setChecked(subObj, resource, sBuilder);
+				
+				array.add(subObj);
+			}
+			
+		}
+		return array.toString();
+	}
+	
+	//这是个测试方法，其他地方没有调用
+	private JSONArray getAllResource(){
 		JSONArray array = new JSONArray();
 		Map<String,String> map = getModuleIds();
 		for(Iterator<String> it = map.keySet().iterator();it.hasNext();){
@@ -273,113 +426,6 @@ public class ModuleManager {
 		return array;
 	
 	}
-	
-	private static void setChecked(JSONObject obj,List<String> resource,StringBuilder sBuilder){
-		obj.put("code", sBuilder.toString());
-		if(resource != null && resource.size() > 0){
-			if(resource.contains(sBuilder.toString()))
-				obj.put("checked", true);
-		}
-		sBuilder.setLength(0);
-	}
-	
-	/**
-	 * 查询角色对应的权限列表
-	 * @param resource
-	 * @return
-	 */
-	public String getRoleViews(List<String> resource){
-
-		JSONArray array = new JSONArray();
-		Map<String,String> map = getModuleIds();
-		StringBuilder sBuilder = new StringBuilder();
-		for(Iterator<String> it = map.keySet().iterator();it.hasNext();){
-			String subId = it.next();
-			String parentId = getParentId(subId);
-			if(parentId == null) continue;
-			
-			sBuilder.append(parentId).append(":").append(subId);
-			if(resource.contains(sBuilder.toString())){
-				String subName = map.get(subId);
-				JSONObject obj = new JSONObject();
-				obj.put("id", subId);
-				obj.put("pId", parentId);
-				obj.put("name", subName);
-				obj.put("open", true);
-				array.add(obj);
-			}
-			sBuilder.setLength(0);
-			
-			HashMap<String,Node> e = moduleAction.get(subId);
-			for(Iterator<String> subIt = e.keySet().iterator();subIt.hasNext();){
-				String subKey = subIt.next();
-				String title = getActionTitle(subId, subKey);
-				
-				if(resource != null && resource.size() > 0){
-					sBuilder.append(parentId).append(":").append(subId).append(":").append(subKey);
-					if(resource.contains(sBuilder.toString())){
-						JSONObject subObj = new JSONObject();
-						subObj.put("id", subKey);
-						subObj.put("pId", subId);
-						subObj.put("name", title);
-						
-						array.add(subObj);
-					}
-						
-				}
-				sBuilder.setLength(0);
-			}
-			
-		}
-		return array.toString();
-	
-	}
-	
-	/**
-	 * 获取对应角色的权限菜单树,供编辑角色权限列表使用
-	 * @return
-	 */
-	public String getRolesAclTree(List<String> resource){
-		JSONArray array = new JSONArray();
-		Map<String,String> map = getModuleIds();
-		StringBuilder sBuilder = new StringBuilder();
-		for(Iterator<String> it = map.keySet().iterator();it.hasNext();){
-			String subId = it.next();
-			String parentId = getParentId(subId);
-			if(parentId == null) continue;
-			
-			String subName = map.get(subId);
-			
-			JSONObject obj = new JSONObject();
-			obj.put("id", subId);
-			obj.put("pId", parentId);
-			obj.put("name", subName);
-			
-			sBuilder.append(parentId).append(":").append(subId);
-			setChecked(obj, resource, sBuilder);
-			
-			array.add(obj);
-			
-			HashMap<String,Node> e = moduleAction.get(subId);
-			for(Iterator<String> subIt = e.keySet().iterator();subIt.hasNext();){
-				String subKey = subIt.next();
-				String title = getActionTitle(subId, subKey);
-				
-				JSONObject subObj = new JSONObject();
-				subObj.put("id", subKey);
-				subObj.put("pId", subId);
-				subObj.put("name", title);
-				
-				sBuilder.append(parentId).append(":").append(subId).append(":").append(subKey);
-				setChecked(subObj, resource, sBuilder);
-				
-				array.add(subObj);
-			}
-			
-		}
-		return array.toString();
-	}
-	
 	public static void main(String[] args) throws Exception{
 		String path = ServletInit.class.getResource("/").getPath();
 		path = path.substring(0, path.indexOf("classes"))+"module.xml";
