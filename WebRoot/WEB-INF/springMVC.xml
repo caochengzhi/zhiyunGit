@@ -30,12 +30,12 @@
     -->
     
     <!--配置拦截器，拦截所有请求-->  
-	<mvc:interceptors>
+	<mvc:interceptors >
 		<bean class="com.chengzhi.scdp.common.CommonInterceptor"/>
 	</mvc:interceptors>
     
     <!-- 自定义的全局异常处理器 ，只要实现HandlerExceptionResolver接口就是全局异常处理器-->
-	<bean class="com.chengzhi.scdp.common.CustomExceptionResolver"></bean> 
+	<bean class="com.chengzhi.scdp.common.Exceptions.CustomExceptionResolver"></bean> 
 
 	<!-- 使用默认的静态资源处理Servlet处理静态资源(涉及spring-mvc.xml, web.xml) -->
     <mvc:default-servlet-handler/>

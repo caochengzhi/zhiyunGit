@@ -112,6 +112,12 @@
 	     <url-pattern>/images/*</url-pattern>    
  	</servlet-mapping> 
   
+	<servlet>
+	     <servlet-name>servletInit</servlet-name>
+	     <servlet-class>com.chengzhi.scdp.common.ServletInit</servlet-class>
+	     <load-on-startup>1</load-on-startup>
+	</servlet>
+
 	<!-- 连接池监控的servlet -->  
 	<servlet>  
 	    <servlet-name>ProxoolAdmin</servlet-name>  

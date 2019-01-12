@@ -27,14 +27,14 @@
 		<module id="roleManager" title="角色管理">
 			<action name="add" title="添加角色"/>
 			<action name="modify" title="编辑角色"/>
-			<action name="modify_permission" title="编辑权限"/>
 			<action name="view_permission" title="查看权限"/>
+			<action name="modify_permission" title="编辑权限"/>
 		</module>
 		<module id="userManager" title="用户管理">
-			<action name="search" title="查询用户"/>
-			<action name="add" title="添加用户"/>
-			<action name="modify" title="编辑用户"/>
-			<action name="cancel" title="注销用户"/>
+			<action name="search" title="查询"/>
+			<action name="add" title="新增"/>
+			<action name="modify" title="编辑"/>
+			<action name="cancel" title="注销"/>
 		</module>
 		<module id="dictManager" title="字典管理">
 			<action name="search" title="查询用户"/>
