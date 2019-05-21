@@ -2,6 +2,8 @@ package com.chengzhi.scdp.database.dao;
 
 import java.util.List;
 
+import com.chengzhi.scdp.database.dao.AbstractModel;
+
 /**
  * 分页结果集对象
  * @author beisi

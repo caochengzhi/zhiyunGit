@@ -394,7 +394,6 @@ public class StringUtil {
         return StringUtil.decrypt(StringUtil.replace(text, "[,],$", new String[]{"+", "/", "="}));   
     }   
       
-      
     /**  
      * @param s  
      * @return  

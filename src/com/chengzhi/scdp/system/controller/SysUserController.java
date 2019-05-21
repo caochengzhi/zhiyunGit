@@ -4,9 +4,6 @@ import java.util.List;
 
 import javax.servlet.http.HttpServletRequest;
 
-import net.sf.json.JSONArray;
-import net.sf.json.JSONObject;
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -23,6 +20,9 @@ import com.chengzhi.scdp.system.service.IRolesService;
 import com.chengzhi.scdp.system.service.ISysUserService;
 import com.chengzhi.scdp.tools.DateTimeUtil;
 import com.chengzhi.scdp.tools.JsonUtil;
+
+import net.sf.json.JSONArray;
+import net.sf.json.JSONObject;
 
 /**
  * 用户管理

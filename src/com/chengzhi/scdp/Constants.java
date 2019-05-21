@@ -1,5 +1,7 @@
 package com.chengzhi.scdp;
 
+import java.util.regex.Pattern;
+
 import org.apache.shiro.SecurityUtils;
 import org.apache.shiro.subject.Subject;
 
@@ -7,9 +9,13 @@ import com.chengzhi.scdp.system.dao.SysUsers;
 
 public class Constants {
 	 
+	public static Pattern SPLIT = Pattern.compile(",");
+	
 	public static final String BUTTON = "button";
 	public static final String MENU = "menu";
 	public static final String MODEL = "model";
+	public static final String DEFAULT_PASSWORD = "123456";
+	public static final Long DEFAULT_ORGANIZATIONID = 360L;
 	
 	public static final int DEFAULT_PAGE_SIZE = 20;
 	 

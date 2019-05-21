@@ -8,7 +8,9 @@ import javax.servlet.http.HttpSession;
 import org.apache.log4j.Logger;
 import org.apache.shiro.authc.AuthenticationException;
 import org.apache.shiro.subject.Subject;
+import org.apache.shiro.web.filter.AccessControlFilter;
 import org.apache.shiro.web.filter.authc.FormAuthenticationFilter;
+import org.apache.shiro.web.util.SavedRequest;
 import org.apache.shiro.web.util.WebUtils;
 
 import com.chengzhi.scdp.Constants;
@@ -96,7 +98,7 @@ public class MyFormAuthenticationFilter extends FormAuthenticationFilter{
         
         //获取输入的验证码,验证失败，设置错误信息
         String myValidate = getCaptcha(request); 
-        if (validate != null && myValidate != null && !validate.equalsIgnoreCase(myValidate)) {
+        if (validate == null || myValidate == null || !validate.equalsIgnoreCase(myValidate)) {
             httpServletRequest.setAttribute(FormAuthenticationFilter.DEFAULT_ERROR_KEY_ATTRIBUTE_NAME, "IncorrectCaptchaException");
             //拒绝访问
             return true;
@@ -124,7 +126,21 @@ public class MyFormAuthenticationFilter extends FormAuthenticationFilter{
 		try {
 			Subject subject = getSubject(request, response);
 			subject.login(token);
-			return onLoginSuccess(token, subject, request, response);
+			
+			
+			
+	        boolean b = onLoginSuccess(token, subject, request, response);
+			
+	        
+	        String successUrl = null;
+	        boolean contextRelative = true;
+	        SavedRequest savedRequest = WebUtils.getAndClearSavedRequest(request);
+	        if (savedRequest != null && savedRequest.getMethod().equalsIgnoreCase(AccessControlFilter.GET_METHOD)) {
+	            successUrl = savedRequest.getRequestUrl();
+	            contextRelative = false;
+	        }
+	        
+			return b;
 		} catch (AuthenticationException e) {
 			return onLoginFailure(token, e, request, response);
 		}

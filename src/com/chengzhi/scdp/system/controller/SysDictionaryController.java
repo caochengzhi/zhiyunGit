@@ -8,9 +8,6 @@ import java.util.Map.Entry;
 
 import javax.servlet.http.HttpServletRequest;
 
-import net.sf.json.JSONArray;
-import net.sf.json.JSONObject;
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -30,6 +27,9 @@ import com.chengzhi.scdp.tools.DateTimeUtil;
 import com.chengzhi.scdp.tools.JsonUtil;
 import com.chengzhi.scdp.tools.ObjectUtil;
 import com.chengzhi.scdp.tools.StringUtil;
+
+import net.sf.json.JSONArray;
+import net.sf.json.JSONObject;
 /**
  * 数据字典服务类
  * @author beisi
@@ -69,7 +69,7 @@ public class SysDictionaryController extends BaseController{
 	@RequestMapping(value = "/saveSysDictType", method = {RequestMethod.POST})
 	public String saveSysDictType(SysDictType cond)throws CustomException{
 		
-		if(StringUtil.isNullOrEmpty(cond.getDictName()) || StringUtil.isNullOrEmpty(cond.getDictType()))
+		if(StringUtil.isNullOrEmpty(cond.getDictName()) || StringUtil.isNullOrEmpty(cond.getDictCode()))
 			throw new CustomException("字典名称或类型不允许为空!");
 		
 		SysDictType sdt = null;

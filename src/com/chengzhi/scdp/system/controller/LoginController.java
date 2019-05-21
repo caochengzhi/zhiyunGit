@@ -6,8 +6,6 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
-import net.sf.json.JSONObject;
-
 import org.apache.shiro.SecurityUtils;
 import org.apache.shiro.subject.Subject;
 import org.apache.shiro.web.filter.authc.FormAuthenticationFilter;
@@ -27,6 +25,8 @@ import com.chengzhi.scdp.system.service.ISysUserService;
 import com.chengzhi.scdp.tools.DateTimeUtil;
 import com.chengzhi.scdp.tools.ObjectUtil;
 import com.chengzhi.scdp.tools.StringUtil;
+
+import net.sf.json.JSONObject;
 
 /**
  * 系统登录

@@ -98,7 +98,6 @@ public class BusinessManager extends AbstractBusinessManager{
 				}
 			}
 		}catch(Exception e){
-			e.printStackTrace();
 			StringUtil.writeStackTraceToLog(logger, e);
 			throw new CustomException("queryPermissions 出错!"+e.getMessage());
 		}

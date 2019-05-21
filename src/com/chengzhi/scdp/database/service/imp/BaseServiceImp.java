@@ -98,7 +98,7 @@ public abstract class BaseServiceImp<T extends AbstractModel, PK extends Seriali
     public PageList<T> findByCond(T cond, String sortName, String sortOrder, int pageNum, int pageSize) {
     	int total = count(cond);
         List<T> list = baseDao.findByCond(cond, sortName, sortOrder, pageNum, pageSize);
-        return new PageList<T>(pageNum,pageSize,total,list);
+        return new PageList<T>(pageNum,pageSize,total,list);   
     }
 
 }
